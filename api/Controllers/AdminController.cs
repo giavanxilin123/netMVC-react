@@ -19,18 +19,18 @@ namespace api.Controllers
         public AdminController(BakeryDbContext context) => _context = context;
 
         [HttpGet]
-        public async Task<IEnumerable<Admin>> Get()
-        {
-            return await _context.Admin.ToListAsync();
-        }
+        public async Task<IEnumerable<Admin>> Get() => await _context.Admin.ToListAsync();
 
+        // c.ForEach(x => Console.WriteLine(x.Name)); => get name
 
         [HttpGet("id")]
         [ProducesResponseType(typeof(Admin), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            var admin = await _context.Admin.FindAsync(id);
+            var admin = await _context.Admin.Where(x => x.Id == id).FirstOrDefaultAsync();
+            // var a =  _context.Admin.Where(x => x.Id == id).ToList();
+            // a.ForEach(x => Console.WriteLine(x.Name));
             return admin == null ? NotFound() : Ok(admin);
         }
 
