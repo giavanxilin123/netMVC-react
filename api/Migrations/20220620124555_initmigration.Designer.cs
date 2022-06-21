@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(BakeryDbContext))]
-    [Migration("20220620055305_MyFirstMigration")]
-    partial class MyFirstMigration
+    [Migration("20220620124555_initmigration")]
+    partial class initmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

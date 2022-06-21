@@ -13,6 +13,8 @@ namespace api.Models
         public DateTime Created {get; set;}
 
         public string Role {get; set;}
+        [Required]
+
         public int Age {get; set;}
         
         public string PhoneNumber {get; set;}
