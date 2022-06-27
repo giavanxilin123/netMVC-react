@@ -1,9 +1,93 @@
-﻿@{
+﻿@model IEnumerable<CustomerSite.Models.Admin>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+@{
+    var a = "Gia Van";
+}
+
+<style>
+    .bg-carousel {
+        background: url(http://theme.hstatic.net/200000399631/1000761068/14/slideshow_1.jpg?v=302);
+        height: 650px;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    .best-product-detail {
+        border: 1px solid silver;
+    }
+    .best-product-img img {
+        width: 100%;
+    }
+    @* .price::before {
+        content: "";
+        width: 10px;
+        height: 50px;
+        color: red
+    } *@
+    
+</style>
+
+<div class="carousel">
+    <div class="bg-carousel"></div>
 </div>
+<div style="text-align: center; margin: 50px 0" class="best-product">
+    <h3>SẢN PHẨM BÁN CHẠY</h3>
+    <div class="row">
+        <div class="col-2">
+            <div class="best-product-detail">
+                 <div class="best-product-img">
+                    <img src="http://product.hstatic.net/200000399631/product/hong_tra_sua_tran_chau_c8e14c8ce5314fb3a2e95d7922ef0680_1024x1024.jpg" alt="">
+                </div>
+                <div class="name">Hồng Trà Sữa Trân Châu</div>
+                <div class="price signature-color">39,000đ</div>
+            </div>
+        </div> 
+        @* <div class="col-2">2</div> 
+        <div class="col-2">3</div> 
+        <div class="col-2">4</div> 
+        <div class="col-2">5</div> 
+        <div class="col-2">6</div>  *@
+    </div>
+</div>
+
+<div class="text-center">
+    <p>@a</p>
+</div>
+
+<form method="post" asp-action="AddAdmin">
+    <input placeholder="Name" type="text" name="Name" value="@ViewBag.Name" />
+    <input placeholder="Role" type="text" name="Role" value="@ViewBag.Role" />
+    <input placeholder="Phone" type="text" name="PhoneNumber" value="@ViewBag.PhoneNumber" />
+    <input placeholder="Age" type="number" name="Age" value="@ViewBag.Age" />
+    <input placeholder="Created" type="text" name="Created" value="@ViewBag.Created" />
+    <input placeholder="ID" type="text" name="Id" value="@ViewBag.Id" />
+    <input type="submit" class="btn btn-info" value="Add Admin" />
+    <input type="submit" class="btn btn-danger" asp-action="Delete" value="Delete" />
+
+</form>
+@{
+
+    foreach (var i in Model)
+    {
+        <div>
+            <span>@i.Id</span>
+            <span>@i.Created</span>
+            <span>@i.Name</span>
+            <span>@i.PhoneNumber</span>
+            <span>@i.Role</span>
+            <span>@i.Age</span>
+
+        </div>
+    }
+}
+
+@*<button onclick="Delete()" class="btn btn-danger"></button>*@
+
+
+
 

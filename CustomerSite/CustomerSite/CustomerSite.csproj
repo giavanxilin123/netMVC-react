@@ -6,4 +6,29 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Newtonsoft.Json" />
+    <None Remove="Views\Admin\" />
+    <None Remove="Views\Product\" />
+    <None Remove="Pages\" />
+    <None Remove="Pages\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.6" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Admin\" />
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="Views\Product\" />
+    <Folder Include="Pages\" />
+    <Folder Include="Pages\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\images\" />
+    <Content Remove="wwwroot\images\logo.webp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\images\logo.webp" />
+  </ItemGroup>
 </Project>

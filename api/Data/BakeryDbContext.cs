@@ -16,6 +16,7 @@ namespace api.Data
 		// public DbSet<Issue> Issue { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<Admin> Admin { get; set; }
+        public DbSet<Product> Product { get; set; }
  
     }
 
