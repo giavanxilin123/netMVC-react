@@ -23,7 +23,7 @@ namespace api.Controllers
 
         // c.ForEach(x => Console.WriteLine(x.Name)); => get name
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(Admin), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
@@ -44,7 +44,7 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = admin.Id }, admin);
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(int id, Admin admin) {
@@ -56,7 +56,7 @@ namespace api.Controllers
             return NoContent();
         }
         
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id) {

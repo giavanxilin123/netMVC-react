@@ -23,14 +23,21 @@ namespace api.Controllers
 
         // c.ForEach(x => Console.WriteLine(x.Name)); => get name
 
-        [HttpGet("id")]
+        [HttpGet("GetByCategories/{categories}")]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetByCategories(string categories)
+        {
+            var product = await _context.Product.Where(x => x.Categories == categories).ToListAsync();
+            return product == null ? NotFound() : Ok(product);
+        }
+
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
             var product = await _context.Product.Where(x => x.Id == id).FirstOrDefaultAsync();
-            // var a =  _context.Admin.Where(x => x.Id == id).ToList();
-            // a.ForEach(x => Console.WriteLine(x.Name));
             return product == null ? NotFound() : Ok(product);
         }
 
@@ -44,7 +51,7 @@ namespace api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
         }
 
-        [HttpPut("id")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Update(int id, Product product) {
@@ -56,7 +63,7 @@ namespace api.Controllers
             return NoContent();
         }
         
-        [HttpDelete("id")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id) {

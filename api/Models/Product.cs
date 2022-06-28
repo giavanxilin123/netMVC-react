@@ -18,5 +18,7 @@ namespace api.Models
         public DateTime Created {get; set;}
 
         public DateTime Updated {get; set;}
+        
+        public string Categories {get; set;}
     }
 }
