@@ -10,10 +10,8 @@
         <h3 style="margin-bottom: 50px">SẢN PHẨM BÁN CHẠY</h3>
        
         <div class="carousel-row row">
-            
-               
-                @foreach (var i in Model.productList)
-                {
+            @* @foreach (var i in Model.productList)
+            {
                     <div class="col-2">
                         <div class="best-product-detail">
                             <div class="best-product-img">
@@ -24,11 +22,11 @@
                             <div style="margin: 10px 0;" class="price signature-color">@i.Price</div>
                         </div>
                     </div>
-                }
-                
-         
-            
+            }     *@
+            @await Component.InvokeAsync("ProductList", Model.productList)
         </div>
+        
+       
     </div>
 }
 

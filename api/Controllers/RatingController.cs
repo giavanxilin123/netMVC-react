@@ -61,7 +61,19 @@ namespace api.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = rating.RatingId }, rating);
         }
-                
+
+        // [HttpPut("{id}")]
+        // [ProducesResponseType(StatusCodes.Status204NoContent)]
+        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        // public async Task<IActionResult> Update(int id, Product product) {
+        //     if (id != product.Id) return BadRequest();
+
+        //     _context.Entry(product).State  = EntityState.Modified;
+        //     await _context.SaveChangesAsync();
+
+        //     return NoContent();
+        // }
+        
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -70,7 +82,7 @@ namespace api.Controllers
 
             if (ratingToDelete == null) return NotFound();
 
-            _context.Rating.Remove(productToRating);
+            _context.Rating.Remove(ratingToDelete);
             await _context.SaveChangesAsync();
 
             return NoContent();

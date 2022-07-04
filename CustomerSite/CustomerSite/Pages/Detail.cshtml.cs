@@ -20,6 +20,9 @@ namespace CustomerSite.Pages
 
         [BindProperty]
         public string Star {get; set;}
+
+        [BindProperty]
+        public string Review {get; set;}
         
         public Product product;
 
@@ -51,6 +54,7 @@ namespace CustomerSite.Pages
             rating.UserId = 1;
             rating.Product.Id = id;
             rating.Score = Int32.Parse(Star);
+            rating.Comment = Review;
             
             await client.PostAsJsonAsync("/api/Rating", rating);
             
