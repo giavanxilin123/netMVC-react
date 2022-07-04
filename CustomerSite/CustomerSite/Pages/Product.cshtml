@@ -15,41 +15,18 @@
 
     <div class="product-categories">
         <h2 style="font-weight: 700; margin: 50px 0">ĐẶT MÓN NGAY - SAY CHUK CHUK</h2>
-        <form class="filter-categories" asp-page-handler="product" method="post">
-            <button asp-route-categories="All" class="filter-name active-filter">Tất cả</button>
-            <button asp-route-categories="Refresher" class="filter-name">Refresher</button>
-            <button asp-route-categories="Fruit Tea" class="filter-name">Fruit Tea</button>
-            <button asp-route-categories="Wellness Tea" class="filter-name">Wellness Tea</button>
-            <button asp-route-categories="Coffee" class="filter-name">Coffee</button>
-            <button asp-route-categories="Milk Tea" class="filter-name">Milk Tea</button>
-            <button asp-route-categories="Cake" class="filter-name">Cake</button>
+        @* <form method="post">
+             <button asp-page-handler="productbycategories" asp-route-categories="11">refresher</button>
+        </form> *@
+        <form class="filter-categories" method="post">
+            <button asp-page-handler="productbycategories" asp-route-categories="All" class="filter-name active-filter">Tất cả</button>
+            <button asp-page-handler="productbycategories" asp-route-categories="Refresher" class="filter-name">Refresher</button>
+            <button asp-page-handler="productbycategories" asp-route-categories="Fruit Tea" class="filter-name">Fruit Tea</button>
+            <button asp-page-handler="productbycategories" asp-route-categories="Wellness Tea" class="filter-name">Wellness Tea</button>
+            <button asp-page-handler="productbycategories" asp-route-categories="Coffee" class="filter-name">Coffee</button>
+            <button asp-page-handler="productbycategories" asp-route-categories="Milk Tea" class="filter-name">Milk Tea</button>
+            <button asp-page-handler="productbycategories" asp-route-categories="Cake" class="filter-name">Cake</button>
         </form>
-
-        <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 
         <div class="product-row row">
             @foreach (var i in Model.productList)
@@ -67,7 +44,6 @@
             }
         </div>
         <div>
-
         </div>
     </div>
 

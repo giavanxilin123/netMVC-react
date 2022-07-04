@@ -1,15 +1,25 @@
 ﻿<Properties StartupConfiguration="{60234317-2377-430B-A0D0-10E046F5ED03}|Default">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Properties/launchSettings.json">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Controllers/RatingController.cs">
     <Files>
       <File FileName="Controllers/AdminController.cs" Line="73" Column="2" />
       <File FileName="Models/Admin.cs" Line="1" Column="1" />
-      <File FileName="Controllers/CustomerController.cs" Line="1" Column="1" />
-      <File FileName="Properties/launchSettings.json" Line="1" Column="1" />
+      <File FileName="Properties/launchSettings.json" Line="14" Column="30" />
+      <File FileName="Models/UserDto.cs" Line="1" Column="1" />
+      <File FileName="Models/User.cs" Line="1" Column="1" />
+      <File FileName="Data/BakeryDbContext.cs" Line="24" Column="1" />
+      <File FileName="Controllers/AuthController.cs" Line="23" Column="57" />
+      <File FileName="appsettings.json" Line="16" Column="1" />
+      <File FileName="appsettings.Development.json" Line="1" Column="1" />
+      <File FileName="Program.cs" Line="21" Column="2" />
+      <File FileName="Controllers/ProductController.cs" Line="52" Column="10" />
+      <File FileName="Models/Product.cs" Line="1" Column="1" />
+      <File FileName="Controllers/RatingController.cs" Line="22" Column="101" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -17,9 +27,8 @@
           <Node name="api" expanded="True">
             <Node name="api" expanded="True">
               <Node name="Controllers" expanded="True" />
-              <Node name="Migrations" expanded="True">
-                <Node name="20220620124555_initmigration.cs" expanded="True" />
-              </Node>
+              <Node name="Data" expanded="True" />
+              <Node name="Migrations" expanded="True" />
               <Node name="Models" expanded="True" />
               <Node name="Properties" expanded="True" />
               <Node name="appsettings.json" expanded="True" />
@@ -33,5 +42,4 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.api PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MultiItemStartupConfigurations />
 </Properties>

@@ -11,6 +11,8 @@ namespace CustomerSite.Models
 
 		public string ImagePath {get; set;}
 
+        public string Categories {get; set;}
+
         public string Description {get; set;}
 
         public DateTime Created {get; set;}

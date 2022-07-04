@@ -6,13 +6,14 @@
     <title>@ViewData["Title"] - CustomerSite</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="~/CustomerSite.styles.css" asp-append-version="true" />
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
-            <div style="display: flex; padding: 0 140px" class="container-fluid">
+            <div style="display: flex; padding: 0 130px" class="container-fluid">
                 @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CustomerSite</a>*@
                 <div class="logo">
                     <img style="width: 150px" src="~/images/logo.webp" asp-append-version="true">
@@ -39,7 +40,16 @@
                 <div class="add-to-cart">
                     <i class="fa-solid fa-magnifying-glass signature-color search"></i>
                     <i class="fa-solid fa-basket-shopping signature-color cart"></i>
-                    <i class="fa-solid fa-bars signature-color bar"></i>
+                    
+                </div>
+                <div class="dropdown">
+                    <button class="dropdown-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                       <i class="fa-solid fa-bars signature-color bar"></i>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
+                        <li><a asp-page="/Register" class="dropdown-item">Đăng ký</a></li>
+                        <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
+                    </ul>
                 </div>
             </div>
         </nav>
@@ -59,26 +69,8 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
 
-<style>
-    .signature-color {
-        color: #f57f48;
-    }
-    .active , .nav-link:hover {
-        color: #f57f48 !important; 
-    }
-    .search, .cart, .bar {
-        margin: 0 5px;
-        font-size: 18px;
-        cursor: pointer;
-    }
-    .navbar-nav {
-        padding: 0 20px;
-    }
-</style>
-<script>
+    <script>
     var navLink = document.getElementsByClassName("nav-link")
     
     @* var navLink = [...navItem].map(x => x.getElementsByClassName("nav-link")[0]) *@
@@ -96,5 +88,30 @@
             this.className += " active";
         });
     }
-</script>
+    </script>
+</body>
+</html>
+
+<style>
+    .dropdown-btn {
+        border: none;
+        background-color: transparent;
+    }
+    .signature-color {
+        color: #f57f48;
+    }
+    .active , .nav-link:hover {
+        color: #f57f48 !important; 
+    }
+    .search, .cart, .bar {
+        margin: 0 5px;
+        font-size: 18px;
+        cursor: pointer;
+    }
+    .navbar-nav {
+        padding: 0 20px;
+    }
+</style>
+
+
 

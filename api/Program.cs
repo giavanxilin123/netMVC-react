@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<BakeryDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
-
+Console.WriteLine("Configuration ", builder.Configuration);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

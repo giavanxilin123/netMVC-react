@@ -13,14 +13,16 @@ namespace api.Data
 
         }
 
-		// public DbSet<Issue> Issue { get; set; }
-        public DbSet<Customer> Customer { get; set; }
+		
+        // public DbSet<Customer> Customer { get; set; }
         public DbSet<Admin> Admin { get; set; }
         public DbSet<Product> Product { get; set; }
- 
+        public DbSet<User> User { get; set; }
+        public DbSet<Rating> Rating { get; set; }
+
     }
 
-    //class Stack<T>
+    //class Stack<T>
     //{
     //    T _fakevalue;
     //    public void push(T fakevalue)
@@ -34,9 +36,9 @@ namespace api.Data
     //    }
     //}
 
-    
+
     //public Stack<int> s = new Stack<int>();
-	 
+
 }
 
 

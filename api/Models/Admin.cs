@@ -5,15 +5,17 @@ namespace api.Models
 {
     public class Admin
     {
+        [Key]
         public int Id {get; set;}
-        [Required]
+        
 
         public string Name {get; set;}
 
         public DateTime Created {get; set;}
 
-        public string Role {get; set;}
         [Required]
+        public string Role {get; set;}
+        
 
         public int Age {get; set;}
         

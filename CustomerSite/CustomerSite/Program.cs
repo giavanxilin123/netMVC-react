@@ -30,7 +30,11 @@ app.UseAuthorization();
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages();
+// app.MapRazorPages();
+
+app.UseEndpoints(endpoints => {
+    endpoints.MapRazorPages();
+});
 
 app.Run();
 
