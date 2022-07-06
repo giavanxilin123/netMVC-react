@@ -34,8 +34,11 @@ namespace api.Controllers
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
             User user = new User();
             user.Username = request.Username;
+            user.Name = request.Name;
+            user.Age = request.Age;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.Name = request.Name;
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetByUsername), new { username = user.Username }, user);
@@ -66,6 +69,8 @@ namespace api.Controllers
             string token = CreateToken(user);
             return Ok(token);
         }
+
+        
 
         private string CreateToken(User user)
         {

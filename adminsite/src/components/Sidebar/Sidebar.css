@@ -1,0 +1,27 @@
+#sidebar {
+    background-color: #121e2d;
+    width: 240px;
+}
+
+.logo {
+    padding: 20px;
+    border-bottom: 1px solid rgba(233,235,236,.6);
+}
+.logo-sm img {
+    width: 95px;
+}
+
+#menu {
+    display: grid;
+}
+#menu a{
+   text-decoration: none;
+   color: #8fa6bf;
+   padding: 12px 30px;
+   display: flex;
+}
+
+#menu a:hover{
+    background-color: #0576b9;
+    color: #ffffff;
+ }
