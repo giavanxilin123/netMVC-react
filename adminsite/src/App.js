@@ -8,7 +8,7 @@ import {
 import Sidebar from "./components/Sidebar";
 import Dashboard from './components/Dashboard';
 import UserManagement from './components/UserManagement';
-import Product from './components/Product';
+import ProductManagement from './components/ProductManagement';
 import Category from './components/Category';
 
 // import Button from 'react-bootstrap/Button';
@@ -22,6 +22,7 @@ import Category from './components/Category';
 import { Menubar } from 'primereact/menubar';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
+
 // dotenv.config();
 function App() {
   const items = [
@@ -158,7 +159,7 @@ function App() {
     <BrowserRouter>
         <div style={{display: "flex", height: "100vh"}}>
           <Sidebar></Sidebar>
-          <div style={{width : "83%"}}>
+          <div style={{width : "83%", overflow: "auto"}}>
             <Menubar
               model={items}
               start={<InputText placeholder="Search" type="text"/>}
@@ -168,7 +169,7 @@ function App() {
                 <Route path="/" element={<Dashboard/>} />
                 <Route path="/dashboard" element={<Dashboard/>} />
                 <Route path="/user" element={<UserManagement/>} />
-                <Route path="/product" element={<Product/>} />
+                <Route path="/product" element={<ProductManagement/>} />
                 <Route path="/category" element={<Category/>} />
             </Routes>
           </div>

@@ -19,15 +19,13 @@ function UserManagement() {
         fetchDataAsync();
     },[])
 
-
-
     return (
         <div id="user-management">
             <DataTable value={user} responsiveLayout="scroll">
-                    <Column field="username" header="Username"></Column>
-                    <Column field="name" header="Name"></Column>
-                    <Column field="age" header="Age"></Column>
-                    <Column field="address" header="Address"></Column>
+                <Column field="username" header="Username"></Column>
+                <Column field="name" header="Name"></Column>
+                <Column field="age" header="Age"></Column>
+                <Column field="address" header="Address"></Column>
             </DataTable>
             {/* {user.map((c, index) => (
             <span key={index}>{c.name}</span>

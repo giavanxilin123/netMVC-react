@@ -11,17 +11,17 @@ import {BASE_URL} from "./Constants/config"
 // }
 
 export const get = endpoint => {
-    return axios.get(BASE_URL + endpoint);
+    return axios.get(BASE_URL + "/" + endpoint);
 }
 
 export function post(endpoint, body) {
-    return axios.post(BASE_URL + endpoint, body);
+    return axios.post(BASE_URL + "/" + endpoint, body);
 }
   
 export function put(endpoint, body) {
-    return axios.put(BASE_URL + endpoint, body);
+    return axios.put(BASE_URL + "/" + endpoint, body);
 }
 
 export function del(endpoint) {
-    return axios.delete(BASE_URL + endpoint);
+    return axios.delete(BASE_URL + "/" + endpoint);
 }

@@ -3,10 +3,6 @@ import { Link } from "react-router-dom";
 import "./Sidebar.css";
 
 export default class Sidebar extends Component {
-//   state = {
-//     username: "Van",
-// };
-
 render() {
     return (
           <div id="sidebar">
@@ -22,29 +18,6 @@ render() {
             <Link to ="/category"><i style={{marginRight: "10px", lineHeight: "24px"}} className="pi pi-box"></i>Category</Link>  
             </div>
           </div>
-          
-          // <nav id="navbar">
-          //   <ul>
-          //     <Link to="/">
-          //       <li>Home</li>
-          //     </Link>
-          //     <Link to="/contact">
-          //       <li>Contact</li>
-          //     </Link>
-          //     <Link to="/about">
-          //       <li>About</li>
-          //     </Link>
-          //     <Link to="/brand">
-          //       <li>Brand</li>
-          //     </Link>
-          //   </ul>
-
-          //   {/* <input type="text" onChange={(e) => this.props.onSearchKey(e)} /> */}
-
-          //   {/* <div className="nav-details">
-          //     <p className="nav-username"> {value.username} </p>
-          //   </div> */}
-          // </nav>
     );
   }
 }
