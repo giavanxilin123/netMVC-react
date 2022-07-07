@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
-import {getProductRequest, addProductRequest, updateProductRequest} from './services/request'
+import {getProductRequest, addProductRequest, updateProductRequest, deleteProductRequest} from './services/request'
 import {handleApi} from '../../handleApi'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
-import { FileUpload } from 'primereact/fileupload';
 import { Rating } from 'primereact/rating';
 import { Toolbar } from 'primereact/toolbar';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -29,6 +28,7 @@ function ProductManagement() {
     updated: ''
   };
   const [products, setProducts] = useState([]);
+  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [productDialog, setProductDialog] = useState(false);
   const [product, setProduct] = useState(emptyProduct);
@@ -54,13 +54,13 @@ function ProductManagement() {
     setProductDialog(false);
   }
 
+  const hideDeleteProductDialog = () => {
+    setDeleteProductDialog(false);
+  }
+
   const addProductAsync = async (payload) => {
     await handleApi(addProductRequest(payload));
   }
-
-  // const updateProductAsync = async(payload) => {
-  //   await handleApi(Update)
-  // }
 
   const saveProduct = () => {
     //clone 
@@ -68,23 +68,25 @@ function ProductManagement() {
     let _product = {...product};
 
     if (product.id) {
-      // const index = findIndexById(product.id);
+      //update view
       const index = _products.findIndex(p => p.id === product.id) 
       _products[index] = _product;
+      let date = new Date();
+      _product.updated = date;
       toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-      
+      //call axios
       (async(p) => {
         await handleApi(updateProductRequest(p))
       })(_product)
-
-      // updateProductAsync(_product)
     }
     else {
+      //update view
       _product.imagePath = 'product-placeholder.svg';
       _products.push(_product);
       let date = new Date();
       [_product.created, _product.updated] = new Array(2).fill(date)
       toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+      //call axios
       addProductAsync(_product);
     }
     
@@ -96,6 +98,24 @@ function ProductManagement() {
   const editProduct = (product) => {
     setProduct({...product});
     setProductDialog(true);
+  }
+
+  const confirmDeleteProduct = (product) => {
+    setProduct(product);
+    setDeleteProductDialog(true);
+  }
+
+  const deleteProduct = () => {
+    let _products = products.filter(val => val.id !== product.id);
+    let id = product.id;
+    setProducts(_products);
+    setDeleteProductDialog(false);
+    setProduct(emptyProduct);
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+
+    (async(id) => {
+      await handleApi(deleteProductRequest(id))
+    })(id)
 }
 
   //templates
@@ -128,9 +148,20 @@ function ProductManagement() {
     return (
         <React.Fragment>
             <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct(rowData)} />
-            {/* <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} /> */}
+            <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} />
         </React.Fragment>
     );
+  }
+
+  const deleteProductDialogFooter = (
+    <React.Fragment>
+        <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductDialog} />
+        <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteProduct} />
+    </React.Fragment>
+  );
+
+  const ratingBodyTemplate = (rowData) => {
+    return <Rating value={rowData.id /3} readOnly cancel={false} />;
   }
 
   //methods
@@ -169,10 +200,18 @@ function ProductManagement() {
 
   const priceBodyTemplate = (rowData) => {
     return formatCurrency(rowData.price);
+  }
+
+  const createdBodyTemplate = (rowData) => {
+    return new Date(rowData.created).toLocaleString();
+  } 
+
+  const updatedBodyTemplate = (rowData) => {
+    return new Date(rowData.updated).toLocaleString();
   } 
   
   const statusBodyTemplate = (rowData) => {
-    return <span className={`product-badge status-${flagStock(rowData.stock)}`}>{flagStock(rowData.stock)}</span>;
+    return <span className={`product-badge status-${flagStock(rowData.stock).toLowerCase()}`}>{flagStock(rowData.stock)}</span>;
   }
 
   
@@ -186,7 +225,9 @@ function ProductManagement() {
             <Column header="Image" body={imageBodyTemplate}></Column>
             <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
             <Column field="categories" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
-           
+            {/* <Column field="id" header="Rating" body={ratingBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column> */}
+            <Column field="created" header="Created" body={createdBodyTemplate}></Column>
+            <Column field="created" header="Updated" body={updatedBodyTemplate}></Column>
             <Column header="Status" body={statusBodyTemplate}></Column>
             <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
           </DataTable>
@@ -194,7 +235,7 @@ function ProductManagement() {
 
 
       <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-               {product.image && <img src={`images/product/${product.image}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image block m-auto pb-3" />}
+               {product.imagePath && <img src={`${product.imagePath}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image block m-auto pb-3" />}
                  <div className="field">
                      <label htmlFor="name">Name</label>
                      <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
@@ -245,7 +286,13 @@ function ProductManagement() {
                          <InputNumber id="stock" value={product.stock} onValueChange={(e) => onInputNumberChange(e, 'stock')} integeronly="true" />
                      </div>
                  </div>
-             </Dialog>
+        </Dialog>
+        <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+            <div className="confirmation-content">
+                <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem'}} />
+                {product && <span>Are you sure you want to delete <b>{product.name}</b>?</span>}
+            </div>
+          </Dialog>
       </div>
   )
 }

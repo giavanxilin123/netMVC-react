@@ -11,19 +11,10 @@ import UserManagement from './components/UserManagement';
 import ProductManagement from './components/ProductManagement';
 import Category from './components/Category';
 
-// import Button from 'react-bootstrap/Button';
-// import Container from 'react-bootstrap/Container';
-// import Form from 'react-bootstrap/Form';
-// import Nav from 'react-bootstrap/Nav';
-// import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
-
-// import { Button } from 'primereact/button';
 import { Menubar } from 'primereact/menubar';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 
-// dotenv.config();
 function App() {
   const items = [
     {
@@ -154,13 +145,13 @@ function App() {
     }
  ];
 
-
   return (
     <BrowserRouter>
         <div style={{display: "flex", height: "100vh"}}>
           <Sidebar></Sidebar>
           <div style={{width : "83%", overflow: "auto"}}>
             <Menubar
+              style={{position: "sticky", top: 0, zIndex: 1000}}
               model={items}
               start={<InputText placeholder="Search" type="text"/>}
               end={<Button label="Logout" icon="pi pi-power-off"/>}

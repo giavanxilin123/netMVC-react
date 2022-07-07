@@ -49,6 +49,25 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
+.p-dialog-content img {
+    width: 150px;
+}
+.product-badge {
+    border-radius: 2px;
+    padding: 0.25em 0.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: .3px;
+}
+.status-instock {
+    background: #c8e6c9;
+    color: #256029;
+}
+.status-lowstock {
+    background: #feedaf;
+    color: #8a5340;
+}
 @media screen and (max-width: 960px) {
     .datatable-crud-demo .p-toolbar {
         flex-wrap: wrap;
