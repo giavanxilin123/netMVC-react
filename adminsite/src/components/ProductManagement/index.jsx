@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
-import {getProductRequest, addProductRequest} from './services/request'
+import {getProductRequest, addProductRequest, updateProductRequest} from './services/request'
 import {handleApi} from '../../handleApi'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -31,11 +31,9 @@ function ProductManagement() {
   const [products, setProducts] = useState([]);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [productDialog, setProductDialog] = useState(false);
-  
-  const toast = useRef(null);
   const [product, setProduct] = useState(emptyProduct);
   const [submitted, setSubmitted] = useState(false);
-
+  const toast = useRef(null);
 
   useEffect(() => {
     const fetchDataAsync = async() => {
@@ -60,20 +58,45 @@ function ProductManagement() {
     await handleApi(addProductRequest(payload));
   }
 
+  // const updateProductAsync = async(payload) => {
+  //   await handleApi(Update)
+  // }
+
   const saveProduct = () => {
+    //clone 
     let _products = [...products];
     let _product = {...product};
+
+    if (product.id) {
+      // const index = findIndexById(product.id);
+      const index = _products.findIndex(p => p.id === product.id) 
+      _products[index] = _product;
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+      
+      (async(p) => {
+        await handleApi(updateProductRequest(p))
+      })(_product)
+
+      // updateProductAsync(_product)
+    }
+    else {
+      _product.imagePath = 'product-placeholder.svg';
+      _products.push(_product);
+      let date = new Date();
+      [_product.created, _product.updated] = new Array(2).fill(date)
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+      addProductAsync(_product);
+    }
     
-    _product.image = 'product-placeholder.svg';
-    _products.push(_product);
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-    addProductAsync(_product);
     setProducts(_products);
     setProductDialog(false);
     setProduct(emptyProduct);
   }
 
-  
+  const editProduct = (product) => {
+    setProduct({...product});
+    setProductDialog(true);
+}
 
   //templates
   const header = (
@@ -101,10 +124,16 @@ function ProductManagement() {
     )
   }
 
+  const actionBodyTemplate = (rowData) => {
+    return (
+        <React.Fragment>
+            <Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" onClick={() => editProduct(rowData)} />
+            {/* <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} /> */}
+        </React.Fragment>
+    );
+  }
+
   //methods
-  
-
-
   const onCategoryChange = e => {
     let _product = {...product}
     _product.categories = e.value;
@@ -152,13 +181,14 @@ function ProductManagement() {
         <Toast ref={toast} />
         <div className="card">
           <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
-          <DataTable value={products} header={header} responsiveLayout="scroll">
-            <Column field="name" header="Name"></Column>
+          <DataTable globalFilter={globalFilter} value={products} header={header} responsiveLayout="scroll">
+            <Column field="name" header="Name" sortable style={{ minWidth: '16rem' }}></Column>
             <Column header="Image" body={imageBodyTemplate}></Column>
-            <Column field="price" header="Price" body={priceBodyTemplate}></Column>
-            <Column field="categories" header="Category"></Column>
+            <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
+            <Column field="categories" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
            
             <Column header="Status" body={statusBodyTemplate}></Column>
+            <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
           </DataTable>
         </div>
 
@@ -191,8 +221,8 @@ function ProductManagement() {
                              <label htmlFor="category3">Fruit Tea</label>
                          </div>
                          <div className="field-radiobutton col-6">
-                             <RadioButton inputId="category4" name="category" value="Fruit Tea" onChange={onCategoryChange} checked={product.category === 'Wellness Tea'} />
-                             <label htmlFor="category4">Fruit Tea</label>
+                             <RadioButton inputId="category4" name="category" value="Wellness Tea" onChange={onCategoryChange} checked={product.category === 'Wellness Tea'} />
+                             <label htmlFor="category4">Wellness Tea</label>
                          </div>
                          <div className="field-radiobutton col-6">
                              <RadioButton inputId="category5" name="category" value="Cake" onChange={onCategoryChange} checked={product.category === 'Cake'} />

@@ -6,6 +6,14 @@ export const getProductRequest = () => {
 }
 
 export const addProductRequest = (payload) => {
-    console.log('payload', payload)
     return post(EndPoints.product, payload);
 }
+
+
+export const updateProductRequest = (payload) => {
+    console.log('payload', payload)
+    return put(`${EndPoints.product}/${payload.id}`, payload);
+}
+
+
+

@@ -15,6 +15,7 @@ export const get = endpoint => {
 }
 
 export function post(endpoint, body) {
+    console.log(body)
     return axios.post(BASE_URL + "/" + endpoint, body);
 }
   

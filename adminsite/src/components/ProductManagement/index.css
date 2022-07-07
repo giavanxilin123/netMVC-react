@@ -40,6 +40,15 @@
 .p-datatable {
     font-size: 14px;
 }
+.table-header h5 {
+    font-size: 18px;
+    font-weight: 600;
+}
+.table-header .p-inputtext{
+    font-size: 14px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
 @media screen and (max-width: 960px) {
     .datatable-crud-demo .p-toolbar {
         flex-wrap: wrap;
