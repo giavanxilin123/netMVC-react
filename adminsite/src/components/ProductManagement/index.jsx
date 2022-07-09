@@ -28,6 +28,7 @@ function ProductManagement() {
     updated: ''
   };
   const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState([])
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [productDialog, setProductDialog] = useState(false);
@@ -39,6 +40,8 @@ function ProductManagement() {
     const fetchDataAsync = async() => {
       let result = await handleApi(getProductRequest());
       setProducts(result.data)
+      let uniqueCate = [... new Set(result.data.map(x => x.categories))]
+      setCategory(uniqueCate)
     }
 
     fetchDataAsync()
@@ -49,6 +52,10 @@ function ProductManagement() {
     setSubmitted(false);
     setProductDialog(true);
   }
+
+  const addCategory = () => {
+    console.log('hihi');
+  }
   const hideDialog = () => {
     setSubmitted(false);
     setProductDialog(false);
@@ -58,11 +65,8 @@ function ProductManagement() {
     setDeleteProductDialog(false);
   }
 
-  const addProductAsync = async (payload) => {
-    await handleApi(addProductRequest(payload));
-  }
-
   const saveProduct = () => {
+    setSubmitted(true);
     //clone 
     let _products = [...products];
     let _product = {...product};
@@ -74,20 +78,24 @@ function ProductManagement() {
       let date = new Date();
       _product.updated = date;
       toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-      //call axios
+     
       (async(p) => {
         await handleApi(updateProductRequest(p))
       })(_product)
     }
     else {
-      //update view
       _product.imagePath = 'product-placeholder.svg';
-      _products.push(_product);
       let date = new Date();
       [_product.created, _product.updated] = new Array(2).fill(date)
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-      //call axios
+      
+      const addProductAsync = async (payload) => {
+        let result = await handleApi(addProductRequest(payload));
+        setProduct(result.data)
+        _products.push(result.data);
+      }
+
       addProductAsync(_product);
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
     }
     
     setProducts(_products);
@@ -140,6 +148,14 @@ function ProductManagement() {
     return (
       <React.Fragment>
         <Button label="Add" icon="pi pi-plus" className="p-button-success mr-2" onClick={openNew} />
+      </React.Fragment>
+    )
+  }
+
+  const rightToolbarTemplate = () => {
+    return (
+      <React.Fragment>
+        <Button label="Add Category" icon="pi pi-upload" className="p-button-help" onClick={addCategory} />
       </React.Fragment>
     )
   }
@@ -219,7 +235,7 @@ function ProductManagement() {
     <div className="datatable-crud-demo">
         <Toast ref={toast} />
         <div className="card">
-          <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
+          <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
           <DataTable globalFilter={globalFilter} value={products} header={header} responsiveLayout="scroll">
             <Column field="name" header="Name" sortable style={{ minWidth: '16rem' }}></Column>
             <Column header="Image" body={imageBodyTemplate}></Column>
@@ -229,10 +245,9 @@ function ProductManagement() {
             <Column field="created" header="Created" body={createdBodyTemplate}></Column>
             <Column field="created" header="Updated" body={updatedBodyTemplate}></Column>
             <Column header="Status" body={statusBodyTemplate}></Column>
-            <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
+            <Column header="Action" body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
           </DataTable>
         </div>
-
 
       <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
                {product.imagePath && <img src={`${product.imagePath}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image block m-auto pb-3" />}
@@ -247,32 +262,15 @@ function ProductManagement() {
                  </div>
 
                  <div className="field">
+                     {/* <Button label="Add Category" icon="pi pi-upload" className="p-button-help" onClick={addCategory} /> */}
                      <label className="mb-3">Category</label>
                      <div className="formgrid grid">
-                         <div className="field-radiobutton col-6">
-                             <RadioButton inputId="category1" name="category" value="Refresher" onChange={onCategoryChange} checked={product.category === 'Refresher'} />
-                             <label htmlFor="category1">Refresher</label>
-                         </div>
-                         <div className="field-radiobutton col-6">
-                             <RadioButton inputId="category2" name="category" value="Milk Tea" onChange={onCategoryChange} checked={product.category === 'Milk Tea'} />
-                             <label htmlFor="category2">Milk Tea</label>
-                         </div>
-                         <div className="field-radiobutton col-6">
-                             <RadioButton inputId="category3" name="category" value="Fruit Tea" onChange={onCategoryChange} checked={product.category === 'Fruit Tea'} />
-                             <label htmlFor="category3">Fruit Tea</label>
-                         </div>
-                         <div className="field-radiobutton col-6">
-                             <RadioButton inputId="category4" name="category" value="Wellness Tea" onChange={onCategoryChange} checked={product.category === 'Wellness Tea'} />
-                             <label htmlFor="category4">Wellness Tea</label>
-                         </div>
-                         <div className="field-radiobutton col-6">
-                             <RadioButton inputId="category5" name="category" value="Cake" onChange={onCategoryChange} checked={product.category === 'Cake'} />
-                            <label htmlFor="category5">Cake</label>
-                        </div>
-                         <div className="field-radiobutton col-6">
-                             <RadioButton inputId="category6" name="category" value="Coffee" onChange={onCategoryChange} checked={product.category === 'Coffee'} />
-                             <label htmlFor="category5">Coffee</label>
-                         </div>
+                     {category.map((c, index) => (
+                          <div key={index} className="field-radiobutton col-6">
+                              <RadioButton inputId={`category${index}`} name="category" value={c} onChange={onCategoryChange} checked={product.category === 'Refresher'} />
+                              <label htmlFor="category1">{c}</label>
+                          </div>
+                      ))}
                      </div>
                 </div>
 

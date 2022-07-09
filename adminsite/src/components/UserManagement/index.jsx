@@ -27,9 +27,7 @@ function UserManagement() {
                 <Column field="age" header="Age"></Column>
                 <Column field="address" header="Address"></Column>
             </DataTable>
-            {/* {user.map((c, index) => (
-            <span key={index}>{c.name}</span>
-            ))} */}
+            
           </div>
     )
 }
