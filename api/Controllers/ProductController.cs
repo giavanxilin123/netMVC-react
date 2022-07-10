@@ -15,20 +15,20 @@ namespace api.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        public readonly BakeryDbContext _context;
-        public ProductController(BakeryDbContext context) => _context = context;
+        public readonly ChukChukDbContext _context;
+        public ProductController(ChukChukDbContext context) => _context = context;
 
         [HttpGet]
-        public async Task<IEnumerable<Product>> Get() => await _context.Product.ToListAsync();
+        public async Task<IEnumerable<Product>> Get() => await _context.Product.Include(x => x.Category).ToListAsync();
 
         // c.ForEach(x => Console.WriteLine(x.Name)); => get name
 
-        [HttpGet("GetByCategories/{categories}")]
+        [HttpGet("GetByCategory/{category}")]
         [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByCategories(string categories)
+        public async Task<IActionResult> GetByCategory(string category)
         {
-            var product = await _context.Product.Where(x => x.Categories == categories).ToListAsync();
+            var product = await _context.Product.Where(x => x.Category.Name == category).ToListAsync();
             return product == null ? NotFound() : Ok(product);
         }
 
@@ -45,9 +45,14 @@ namespace api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(Product product)
         {
+            var name = product.Category.Name;
+            // Console.WriteLine("Name"+ name);
+            var category = _context.Category.Find(name);
+            // var category = _context.Category.Where(x => x .Name == name).ToListAsync();
+            // Console.WriteLine("category" +category);
+            product.Category = category;
             await _context.Product.AddAsync(product);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
         }
 

@@ -14,7 +14,7 @@ builder.Services.AddCors(p => p.AddPolicy("corsapp", builder =>
     builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
-builder.Services.AddDbContext<BakeryDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+builder.Services.AddDbContext<ChukChukDbContext>(o => o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 Console.WriteLine("Configuration ", builder.Configuration);
 var app = builder.Build();
 

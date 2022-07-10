@@ -15,8 +15,8 @@ namespace api.Controllers
     [ApiController]
     public class AdminController : ControllerBase
     {
-        public readonly BakeryDbContext _context;
-        public AdminController(BakeryDbContext context) => _context = context;
+        public readonly ChukChukDbContext _context;
+        public AdminController(ChukChukDbContext context) => _context = context;
 
         [HttpGet]
         public async Task<IEnumerable<Admin>> Get() => await _context.Admin.ToListAsync();

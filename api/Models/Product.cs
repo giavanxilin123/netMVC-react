@@ -9,7 +9,7 @@ namespace api.Models
         public int Id {get; set;}
 
         [Required]
-        [StringLength(50)]
+        public Category Category {get; set;}
         public string Name { get; set; }
 		
 		public int Stock { get; set; }
@@ -25,7 +25,6 @@ namespace api.Models
 
         public DateTime Updated {get; set;}
         
-        public string Categories {get; set;}
 
     }
 }

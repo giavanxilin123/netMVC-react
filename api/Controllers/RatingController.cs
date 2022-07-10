@@ -15,8 +15,8 @@ namespace api.Controllers
     [ApiController]
     public class RatingController : ControllerBase
     {
-        public readonly BakeryDbContext _context;
-        public RatingController(BakeryDbContext context) => _context = context;
+        public readonly ChukChukDbContext _context;
+        public RatingController(ChukChukDbContext context) => _context = context;
 
         [HttpGet]
         public async Task<IEnumerable<Rating>> Get() => await _context.Rating.Include(x => x.Product).ToListAsync();
@@ -56,23 +56,12 @@ namespace api.Controllers
         {
             var id = rating.Product.Id;
             var product = _context.Product.Find(id);
+            Console.WriteLine("product" + product);
             rating.Product = product;
             await _context.Rating.AddAsync(rating);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = rating.RatingId }, rating);
         }
-
-        // [HttpPut("{id}")]
-        // [ProducesResponseType(StatusCodes.Status204NoContent)]
-        // [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        // public async Task<IActionResult> Update(int id, Product product) {
-        //     if (id != product.Id) return BadRequest();
-
-        //     _context.Entry(product).State  = EntityState.Modified;
-        //     await _context.SaveChangesAsync();
-
-        //     return NoContent();
-        // }
         
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

@@ -19,9 +19,9 @@ namespace api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public readonly BakeryDbContext _context;
+        public readonly ChukChukDbContext _context;
         private readonly IConfiguration _configuration ;
-        public AuthController(BakeryDbContext context, IConfiguration configuration) 
+        public AuthController(ChukChukDbContext context, IConfiguration configuration) 
         {_context = context; 
         _configuration = configuration;}
      
@@ -36,9 +36,13 @@ namespace api.Controllers
             user.Username = request.Username;
             user.Name = request.Name;
             user.Age = request.Age;
+            user.Address = request.Address;
+            user.PhoneNumber = request.PhoneNumber;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.Name = request.Name;
+            user.Created = request.Created;
+            user.Updated = request.Updated;
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetByUsername), new { username = user.Username }, user);

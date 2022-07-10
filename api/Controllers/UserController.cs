@@ -15,8 +15,8 @@ namespace api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        public readonly BakeryDbContext _context;
-        public UserController(BakeryDbContext context) => _context = context;
+        public readonly ChukChukDbContext _context;
+        public UserController(ChukChukDbContext context) => _context = context;
 
         [HttpGet]
         public async Task<IEnumerable<User>> Get() => await _context.User.ToListAsync();

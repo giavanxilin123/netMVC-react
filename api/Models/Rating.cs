@@ -11,8 +11,13 @@ namespace api.Models
         public int UserId {get; set;}
 
         public Product Product {get; set;}
+
         public int Score {get; set;}
 
         public string Comment {get; set;}
+
+        public DateTime Created {get; set;}
+
+        public DateTime Updated {get; set;}
     }
 }
