@@ -5,8 +5,8 @@ export const getProductRequest = () => {
     return get(EndPoints.product);
 }
 
-export const addProductRequest = (payload) => {
-    return post(EndPoints.product, payload);
+export const addCategoryRequest = (payload) => {
+    return post(EndPoints.category, payload);
 }
 
 export const updateProductRequest = (payload) => {
@@ -17,5 +17,8 @@ export const deleteProductRequest = (id) => {
     return del(`${EndPoints.product}/${id}`);
 }
 
+export const getCategoryRequest = () => {
+    return get(EndPoints.category);
+}
 
 
