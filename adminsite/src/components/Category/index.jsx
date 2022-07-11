@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
-import {getProductRequest, addCategoryRequest, deleteProductRequest, getCategoryRequest} from './services/request'
+import {addCategoryRequest, deleteCategoryRequest, getCategoryRequest} from './services/request'
 import {handleApi} from '../../handleApi'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -12,53 +12,31 @@ import { InputText } from 'primereact/inputtext';
 import './index.css';
 
 function CategoryManagement() {
-  let emptyProduct = {
-    id: 0,
-    name: '',
-    imagePath: null,
-    description: '',
-    category: {
-      id: 0,
-      name: ''
-    },
-    price: 0,
-    stock: 0,
-    created: '',
-    updated: ''
-  };
-
   let emptyCategory = {
     id : 0,
     name: ''
   }
 
-  const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([])
   const [category, setCategory] = useState(emptyCategory)
-  const [deleteProductDialog, setDeleteProductDialog] = useState(false);
+  const [deleteCategoryDialog, setDeleteCategoryDialog] = useState(false);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [categoryDialog, setCategoryDialog] = useState(false);
-  const [product, setProduct] = useState(emptyProduct);
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
 
   useEffect(() => {
-    const fetchDataAsync = async() => {
-      let result = await handleApi(getProductRequest());
-      setProducts(result.data)
-    }
-
     const fetchCategoryAsync = async() => {
       let result = await handleApi(getCategoryRequest());
       setCategories(result.data)
     }
 
-    fetchDataAsync();
     fetchCategoryAsync();
   }, [])
 
   const openNew = () => {
-    setProduct(emptyProduct);
+    setCategory(emptyCategory)
+
     setSubmitted(false);
     setCategoryDialog(true);
   }
@@ -67,15 +45,14 @@ function CategoryManagement() {
     setCategoryDialog(false);
   }
 
-  const hideDeleteProductDialog = () => {
-    setDeleteProductDialog(false);
+  const hideDeleteCategoryDialog = () => {
+    setDeleteCategoryDialog(false);
   }
 
   const saveCategory = () => {
     setSubmitted(true);
     let _category = {...category};
     let _categories = [...categories]
-    console.log(_categories)
     let date = new Date();
     [_category.created, _category.updated] = new Array(2).fill(date)
       
@@ -93,22 +70,22 @@ function CategoryManagement() {
     setCategory(emptyCategory);
   }
 
-  const confirmDeleteProduct = (product) => {
-    setProduct(product);
-    setDeleteProductDialog(true);
+  const confirmDeleteCategory = (category)=> {
+    setCategory(category);
+    setDeleteCategoryDialog(true);
   }
 
-  const deleteProduct = () => {
-    let _products = products.filter(val => val.id !== product.id);
-    let id = product.id;
-    setProducts(_products);
-    setDeleteProductDialog(false);
-    setProduct(emptyProduct);
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+  const deleteCategory = () => {
+    let _categories = categories.filter(val => val.id !== category.id);
+    let name = category.name;
+    setCategories(_categories)
+    setDeleteCategoryDialog(false);
+    setCategory(emptyCategory)
+    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Category Deleted', life: 3000 });
 
-    (async(id) => {
-      await handleApi(deleteProductRequest(id))
-    })(id)
+    (async(name) => {
+      await handleApi(deleteCategoryRequest(name))
+    })(name)
 }
 
   //templates
@@ -140,15 +117,15 @@ function CategoryManagement() {
   const actionBodyTemplate = (rowData) => {
     return (
         <React.Fragment>
-            <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteProduct(rowData)} />
+            <Button icon="pi pi-trash" className="p-button-rounded p-button-warning" onClick={() => confirmDeleteCategory(rowData)} />
         </React.Fragment>
     );
   }
 
-  const deleteProductDialogFooter = (
+  const deleteCategoryDialogFooter = (
     <React.Fragment>
-        <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteProductDialog} />
-        <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteProduct} />
+        <Button label="No" icon="pi pi-times" className="p-button-text" onClick={hideDeleteCategoryDialog} />
+        <Button label="Yes" icon="pi pi-check" className="p-button-text" onClick={deleteCategory} />
     </React.Fragment>
   );
 
@@ -157,7 +134,6 @@ function CategoryManagement() {
 
   const onInputChange = (e, name) => {
     const val = (e.target && e.target.value) || '';
-    console.log(val)
     let _category = {...category};
     _category[`${name}`] = val;
     setCategory(_category);
@@ -193,10 +169,10 @@ function CategoryManagement() {
                  </div>
         </Dialog>
 
-        <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+        <Dialog visible={deleteCategoryDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteCategoryDialogFooter} onHide={hideDeleteCategoryDialog}>
             <div className="confirmation-content">
                 <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem'}} />
-                {product && <span>Are you sure you want to delete <b>{product.name}</b>?</span>}
+                {category && <span>Are you sure you want to delete <b>{category.name}</b>?</span>}
             </div>
           </Dialog>
       </div>
