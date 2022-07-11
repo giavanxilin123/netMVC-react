@@ -17,5 +17,7 @@ export const deleteProductRequest = (id) => {
     return del(`${EndPoints.product}/${id}`);
 }
 
-
+export const getCategoryRequest = () => {
+    return get(EndPoints.category);
+}
 

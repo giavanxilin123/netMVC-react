@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { classNames } from 'primereact/utils';
-import {getProductRequest, addProductRequest, updateProductRequest, deleteProductRequest} from './services/request'
+import {getProductRequest, addProductRequest, updateProductRequest, deleteProductRequest, getCategoryRequest} from './services/request'
 import {handleApi} from '../../handleApi'
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -19,9 +19,12 @@ function ProductManagement() {
   let emptyProduct = {
     id: 0,
     name: '',
-    imagepath: null,
+    imagePath: null,
     description: '',
-    categories: null,
+    category: {
+      id: 0,
+      name: ''
+    },
     price: 0,
     stock: 0,
     created: '',
@@ -40,11 +43,18 @@ function ProductManagement() {
     const fetchDataAsync = async() => {
       let result = await handleApi(getProductRequest());
       setProducts(result.data)
-      let uniqueCate = [... new Set(result.data.map(x => x.categories))]
-      setCategory(uniqueCate)
+      // let uniqueCate = [... new Set(result.data.map(x => x.category.name))]
+      // setCategory(uniqueCate)
     }
 
-    fetchDataAsync()
+    const fetchCategoryAsync = async() => {
+      let result = await handleApi(getCategoryRequest());
+      // let categoryName = result.data.map(c => c.name);
+      setCategory(result.data)
+    }
+
+    fetchDataAsync();
+    fetchCategoryAsync();
   }, [])
 
   const openNew = () => {
@@ -53,9 +63,6 @@ function ProductManagement() {
     setProductDialog(true);
   }
 
-  const addCategory = () => {
-    console.log('hihi');
-  }
   const hideDialog = () => {
     setSubmitted(false);
     setProductDialog(false);
@@ -75,10 +82,12 @@ function ProductManagement() {
       //update view
       const index = _products.findIndex(p => p.id === product.id) 
       _products[index] = _product;
+
       let date = new Date();
       _product.updated = date;
       toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
      
+      _product.categoryId = _product.category.id;
       (async(p) => {
         await handleApi(updateProductRequest(p))
       })(_product)
@@ -152,14 +161,6 @@ function ProductManagement() {
     )
   }
 
-  const rightToolbarTemplate = () => {
-    return (
-      <React.Fragment>
-        <Button label="Add Category" icon="pi pi-upload" className="p-button-help" onClick={addCategory} />
-      </React.Fragment>
-    )
-  }
-
   const actionBodyTemplate = (rowData) => {
     return (
         <React.Fragment>
@@ -176,14 +177,12 @@ function ProductManagement() {
     </React.Fragment>
   );
 
-  const ratingBodyTemplate = (rowData) => {
-    return <Rating value={rowData.id /3} readOnly cancel={false} />;
-  }
 
   //methods
   const onCategoryChange = e => {
     let _product = {...product}
-    _product.categories = e.value;
+    _product.category.id = e.value.id;
+    _product.category.name = e.value.name;
     setProduct(_product);
   }
 
@@ -235,12 +234,12 @@ function ProductManagement() {
     <div className="datatable-crud-demo">
         <Toast ref={toast} />
         <div className="card">
-          <Toolbar className="mb-4" left={leftToolbarTemplate} right={rightToolbarTemplate}></Toolbar>
+          <Toolbar className="mb-4" left={leftToolbarTemplate}></Toolbar>
           <DataTable globalFilter={globalFilter} value={products} header={header} responsiveLayout="scroll">
             <Column field="name" header="Name" sortable style={{ minWidth: '16rem' }}></Column>
             <Column header="Image" body={imageBodyTemplate}></Column>
             <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
-            <Column field="categories" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
+            <Column field="category.name" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
             {/* <Column field="id" header="Rating" body={ratingBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column> */}
             <Column field="created" header="Created" body={createdBodyTemplate}></Column>
             <Column field="created" header="Updated" body={updatedBodyTemplate}></Column>
@@ -268,7 +267,7 @@ function ProductManagement() {
                      {category.map((c, index) => (
                           <div key={index} className="field-radiobutton col-6">
                               <RadioButton inputId={`category${index}`} name="category" value={c} onChange={onCategoryChange} checked={product.category === 'Refresher'} />
-                              <label htmlFor="category1">{c}</label>
+                              <label htmlFor="category1">{c.name}</label>
                           </div>
                       ))}
                      </div>
