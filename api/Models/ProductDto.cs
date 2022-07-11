@@ -1,21 +1,19 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace api.Models
 {
-    public class Product
+    public class ProductDto
     {
-        [Key]
         public int Id {get; set;}
 
-        [Required]
-        public Category Category {get; set;}
+        public int CategoryId {get; set;}
 
         public string Name { get; set; }
 		
 		public int Stock { get; set; }
 
-        // [Column(TypeName = "money")]
+        [Column(TypeName = "money")]
 		public int Price { get; set; }
 
 		public string ImagePath {get; set;}
@@ -26,6 +24,5 @@ namespace api.Models
 
         public DateTime Updated {get; set;}
         
-
     }
 }

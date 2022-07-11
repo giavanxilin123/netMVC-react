@@ -45,11 +45,8 @@ namespace api.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         public async Task<IActionResult> Create(Product product)
         {
-            var name = product.Category.Name;
-            // Console.WriteLine("Name"+ name);
-            var category = _context.Category.Find(name);
-            // var category = _context.Category.Where(x => x .Name == name).ToListAsync();
-            // Console.WriteLine("category" +category);
+            var id = product.Category.Id;
+            var category = _context.Category.Find(id);
             product.Category = category;
             await _context.Product.AddAsync(product);
             await _context.SaveChangesAsync();
@@ -59,12 +56,24 @@ namespace api.Controllers
         [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> Update(int id, Product product) {
+        public async Task<IActionResult> Update(int id, ProductDto product) {
             if (id != product.Id) return BadRequest();
 
-            _context.Entry(product).State  = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var category = _context.Category.Find(product.CategoryId);
+            var newProduct = _context.Product.Find(id);
 
+            newProduct.Id = product.Id;
+            newProduct.Name = product.Name;
+            newProduct.Stock = product.Stock;
+            newProduct.Price = product.Price;
+            newProduct.ImagePath = product.ImagePath;
+            newProduct.Description = product.Description;
+            newProduct.Created = product.Created;
+            newProduct.Updated = product.Updated;
+            newProduct.Category = category;
+
+            // _context.Entry(product).State  = EntityState.Modified;
+            await _context.SaveChangesAsync();
             return NoContent();
         }
         
@@ -78,7 +87,6 @@ namespace api.Controllers
 
             _context.Product.Remove(productToDelete);
             await _context.SaveChangesAsync();
-
             return NoContent();
         }
     }
