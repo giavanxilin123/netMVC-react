@@ -6,7 +6,8 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
-import { Rating } from 'primereact/rating';
+// import { Rating } from 'primereact/rating';
+import { FileUpload } from 'primereact/fileupload';
 import { Toolbar } from 'primereact/toolbar';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { RadioButton } from 'primereact/radiobutton';
@@ -38,6 +39,7 @@ function ProductManagement() {
   const [product, setProduct] = useState(emptyProduct);
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
+  // const [totalSize, setTotalSize] = useState(0);
 
   useEffect(() => {
     const fetchDataAsync = async() => {
@@ -93,7 +95,7 @@ function ProductManagement() {
       })(_product)
     }
     else {
-      _product.imagePath = 'product-placeholder.svg';
+      // _product.imagePath = 'product-placeholder.svg';
       let date = new Date();
       [_product.created, _product.updated] = new Array(2).fill(date)
       
@@ -229,6 +231,21 @@ function ProductManagement() {
     return <span className={`product-badge status-${flagStock(rowData.stock).toLowerCase()}`}>{flagStock(rowData.stock)}</span>;
   }
 
+
+  const uploadImage = async (event) => {
+    const file = event.files[0];
+    const reader = new FileReader();
+    let blob = await fetch(file.objectURL).then(r => r.blob()); //blob:url
+    reader.readAsDataURL(blob); 
+    reader.onloadend = function () {
+        const base64data = reader.result;
+        let _product = {...product};
+        _product.imagePath = base64data;
+        setProduct(_product);
+        toast.current.show({severity: 'info', summary: 'Success', detail: 'File Uploaded with Auto Mode'});
+    }
+  }
+
   
   return (
     <div className="datatable-crud-demo">
@@ -249,7 +266,12 @@ function ProductManagement() {
         </div>
 
       <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-               {product.imagePath && <img src={`${product.imagePath}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image block m-auto pb-3" />}
+                <div className="field">
+                    <div>Upload Image</div>
+                    <FileUpload mode="basic" name="demo[]"  accept="image/*" customUpload auto uploadHandler={uploadImage} />
+                    {product.imagePath && <img src={`${product.imagePath}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image block m-auto pb-3" />}
+                </div>
+               
                  <div className="field">
                      <label htmlFor="name">Name</label>
                      <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />

@@ -146,6 +146,8 @@ function CategoryManagement() {
   const updatedBodyTemplate = (rowData) => {
     return new Date(rowData.updated).toLocaleString();
   } 
+
+  
   
   return (
     <div className="datatable-crud-demo">
@@ -169,7 +171,7 @@ function CategoryManagement() {
                  </div>
         </Dialog>
 
-        <Dialog visible={deleteCategoryDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteCategoryDialogFooter} onHide={hideDeleteCategoryDialog}>
+          <Dialog visible={deleteCategoryDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteCategoryDialogFooter} onHide={hideDeleteCategoryDialog}>
             <div className="confirmation-content">
                 <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem'}} />
                 {category && <span>Are you sure you want to delete <b>{category.name}</b>?</span>}
