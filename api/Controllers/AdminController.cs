@@ -19,7 +19,9 @@ namespace api.Controllers
         public AdminController(ChukChukDbContext context) => _context = context;
 
         [HttpGet]
-        public async Task<IEnumerable<Admin>> Get() => await _context.Admin.ToListAsync();
+        public async Task<IEnumerable<Admin>> Get() {
+            return await _context.Admin.ToListAsync();
+        }
 
         // c.ForEach(x => Console.WriteLine(x.Name)); => get name
 
@@ -69,6 +71,12 @@ namespace api.Controllers
 
             return NoContent();
         }
+
+        public static string Base64Encode(string plainText) {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+
     }
 }
 
