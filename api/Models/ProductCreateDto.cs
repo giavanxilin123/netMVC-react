@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace api.Models
 {
-    public class Product
+    public class ProductCreateDto
     {
         [Key]
         public int Id {get; set;}
@@ -26,7 +26,5 @@ namespace api.Models
 
         public DateTime Updated {get; set;}
         
-        public List<Rating>? Rating {get; set;}
-
     }
 }

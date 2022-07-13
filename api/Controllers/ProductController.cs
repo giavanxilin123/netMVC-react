@@ -19,7 +19,10 @@ namespace api.Controllers
         public ProductController(ChukChukDbContext context) => _context = context;
 
         [HttpGet]
-        public async Task<IEnumerable<Product>> Get() => await _context.Product.Include(x => x.Category).ToListAsync();
+        public async Task<IEnumerable<Product>> Get() => await _context.Product
+        .Include(x => x.Category)
+        .Include(x => x.Rating)
+        .ToListAsync();
 
         // c.ForEach(x => Console.WriteLine(x.Name)); => get name
 
@@ -28,7 +31,10 @@ namespace api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByCategory(string category)
         {
-            var product = await _context.Product.Where(x => x.Category.Name == category).ToListAsync();
+            var product = await _context.Product
+            .Include(x => x.Category)
+            .Where(x => x.Category.Name == category)
+            .ToListAsync();
             return product == null ? NotFound() : Ok(product);
         }
 
@@ -41,13 +47,45 @@ namespace api.Controllers
             return product == null ? NotFound() : Ok(product);
         }
 
+        [HttpGet("GetBestSeller")]
+        public async Task<IActionResult> GetBestSeller()
+        {
+            var productIdList = await _context.Product
+                .Include(x => x.Rating)
+                .Select(x => new {
+                    score = x.Rating.Count == 0 ? 0 : x.Rating
+                        .Select(y => y.Score)
+                        .Average(),
+                    name = x.Name,
+                    id = x.Id,
+                    imagePath = x.ImagePath,
+                    Price = x.Price})
+                .OrderByDescending(p => p.score)
+                .Take(6)
+                .ToListAsync();
+
+           return Ok(productIdList);
+        }
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create(ProductCreateDto p)
         {
-            var id = product.Category.Id;
+            var id = p.Category.Id;
             var category = _context.Category.Find(id);
-            product.Category = category;
+            p.Category = category;
+            var product = new Product {
+                Id = p.Id,
+                Name = p.Name,
+                Category = p.Category,
+                Stock = p.Stock,
+                Price = p.Price,
+                ImagePath = p.ImagePath,
+                Description = p.Description, 
+                Created = p.Created,
+                Updated = p.Updated,
+                Rating = null
+            };
             await _context.Product.AddAsync(product);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);

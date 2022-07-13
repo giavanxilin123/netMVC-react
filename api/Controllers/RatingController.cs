@@ -7,9 +7,10 @@ using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
+
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace api.Controllers
+namespace api.Controllerss
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -41,6 +42,7 @@ namespace api.Controllers
             return rating == null ? NotFound() : Ok(average);
         }
 
+
         [HttpGet("GetRating/{productId}")]
         [ProducesResponseType(typeof(Rating), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -52,12 +54,23 @@ namespace api.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Create(Rating rating)
+        public async Task<IActionResult> Create(RatingDto ratingDto)
         {
-            var id = rating.Product.Id;
+            // var id = rating.Product.Id;
+            var id = ratingDto.ProductId;
             var product = _context.Product.Find(id);
-            Console.WriteLine("product" + product);
-            rating.Product = product;
+
+            var rating = new Rating {
+                RatingId = ratingDto.RatingId,
+                UserId = ratingDto.UserId,
+                Product = product,
+                Score = ratingDto.Score,
+                Comment = ratingDto.Comment,
+                Created = ratingDto.Created,
+                Updated = ratingDto.Updated
+            };
+            
+            // rating.Product = product;
             await _context.Rating.AddAsync(rating);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = rating.RatingId }, rating);

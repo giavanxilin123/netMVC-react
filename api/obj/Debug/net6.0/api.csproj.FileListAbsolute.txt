@@ -120,3 +120,7 @@
 /Users/admin/Desktop/Rookie5/Rookie_Ass1/api/obj/Debug/net6.0/api.pdb
 /Users/admin/Desktop/Rookie5/Rookie_Ass1/api/obj/Debug/net6.0/api.genruntimeconfig.cache
 /Users/admin/Desktop/Rookie5/Rookie_Ass1/api/obj/Debug/net6.0/ref/api.dll
+/Users/admin/Desktop/Rookie5/Rookie_Ass1/api/bin/Debug/net6.0/Microsoft.AspNetCore.JsonPatch.dll
+/Users/admin/Desktop/Rookie5/Rookie_Ass1/api/bin/Debug/net6.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+/Users/admin/Desktop/Rookie5/Rookie_Ass1/api/bin/Debug/net6.0/Newtonsoft.Json.dll
+/Users/admin/Desktop/Rookie5/Rookie_Ass1/api/bin/Debug/net6.0/Newtonsoft.Json.Bson.dll

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "HiLA+GDk6CNwheog9A+WWhdhw3txL/ZFkxJ9Fgz5RHztCAiItmKmpoS5VJ6RQ4j/JynoNNO1XfLVw2FyFQJ6yg==",
+  "dgSpecHash": "Yp3zoMbApKI8tdV+7Zu03hrHnW1HNNq/QE5HvP6SC6VeH3aQmbGh3iEvFWoAeI8XpS8ALBbgNjAFZ9w3k0efyQ==",
   "success": true,
   "projectFilePath": "/Users/admin/Desktop/Rookie5/Rookie_Ass1/api/api.csproj",
   "expectedPackageFiles": [
@@ -9,7 +9,9 @@
     "/Users/admin/.nuget/packages/microsoft.aspnetcore.http.abstractions/2.2.0/microsoft.aspnetcore.http.abstractions.2.2.0.nupkg.sha512",
     "/Users/admin/.nuget/packages/microsoft.aspnetcore.http.extensions/2.2.0/microsoft.aspnetcore.http.extensions.2.2.0.nupkg.sha512",
     "/Users/admin/.nuget/packages/microsoft.aspnetcore.http.features/2.2.0/microsoft.aspnetcore.http.features.2.2.0.nupkg.sha512",
-    "/Users/admin/.nuget/packages/microsoft.csharp/4.5.0/microsoft.csharp.4.5.0.nupkg.sha512",
+    "/Users/admin/.nuget/packages/microsoft.aspnetcore.jsonpatch/6.0.7/microsoft.aspnetcore.jsonpatch.6.0.7.nupkg.sha512",
+    "/Users/admin/.nuget/packages/microsoft.aspnetcore.mvc.newtonsoftjson/6.0.7/microsoft.aspnetcore.mvc.newtonsoftjson.6.0.7.nupkg.sha512",
+    "/Users/admin/.nuget/packages/microsoft.csharp/4.7.0/microsoft.csharp.4.7.0.nupkg.sha512",
     "/Users/admin/.nuget/packages/microsoft.data.sqlclient/2.1.4/microsoft.data.sqlclient.2.1.4.nupkg.sha512",
     "/Users/admin/.nuget/packages/microsoft.data.sqlclient.sni.runtime/2.1.1/microsoft.data.sqlclient.sni.runtime.2.1.1.nupkg.sha512",
     "/Users/admin/.nuget/packages/microsoft.entityframeworkcore/6.0.5/microsoft.entityframeworkcore.6.0.5.nupkg.sha512",
@@ -41,6 +43,8 @@
     "/Users/admin/.nuget/packages/microsoft.openapi/1.2.3/microsoft.openapi.1.2.3.nupkg.sha512",
     "/Users/admin/.nuget/packages/microsoft.win32.registry/4.7.0/microsoft.win32.registry.4.7.0.nupkg.sha512",
     "/Users/admin/.nuget/packages/microsoft.win32.systemevents/4.7.0/microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "/Users/admin/.nuget/packages/newtonsoft.json/13.0.1/newtonsoft.json.13.0.1.nupkg.sha512",
+    "/Users/admin/.nuget/packages/newtonsoft.json.bson/1.0.2/newtonsoft.json.bson.1.0.2.nupkg.sha512",
     "/Users/admin/.nuget/packages/swashbuckle.aspnetcore/6.2.3/swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "/Users/admin/.nuget/packages/swashbuckle.aspnetcore.swagger/6.2.3/swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
     "/Users/admin/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.2.3/swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",
