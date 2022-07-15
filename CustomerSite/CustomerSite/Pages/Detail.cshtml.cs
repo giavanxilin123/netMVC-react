@@ -45,17 +45,17 @@ namespace CustomerSite.Pages
         }
 
         public async Task<IActionResult> OnPostAsync(int id){
-            Rating rating = new Rating();
+            RatingDto rating = new RatingDto();
             HttpClient client = _api.initial();
             var response = await client.GetAsync($"api/product/{id}");
             var result =  response.Content.ReadAsStringAsync().Result;
             product = JsonConvert.DeserializeObject<Product>(result);
-            
+
             rating.UserId = 1;
-            rating.Product.Id = id;
+            rating.ProductId = id;
             rating.Score = Int32.Parse(Star);
             rating.Comment = Review;
-            
+ 
             await client.PostAsJsonAsync("/api/Rating", rating);
             
             var response1 = await client.GetAsync($"api/rating/getaveragescore/{id}");

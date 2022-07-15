@@ -14,13 +14,13 @@ namespace CustomerSite.Pages
     {
         private APIHelper _api = new APIHelper();
        
-        public List<Product> productList = new List<Product>();
+        public List<Product> bestProduct = new List<Product>();
 
         public async Task<IActionResult> OnGetAsync(){
             HttpClient client = _api.initial();
-            var response = await client.GetAsync("api/product/");
-            var result =  response.Content.ReadAsStringAsync().Result;
-            productList = JsonConvert.DeserializeObject<List<Product>>(result);
+            var response = await client.GetAsync("api/product/getBestSeller");
+            var result =  response.Content.ReadAsStringAsync().Result;    
+            bestProduct = JsonConvert.DeserializeObject<List<Product>>(result);
             return Page();
         }        
     }

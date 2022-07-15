@@ -11,7 +11,12 @@ namespace CustomerSite.Models
             Id = 0,
             Name = "string",
             ImagePath = "string",
-            Categories = "string",
+            Category = new Category{
+                Id = 0,
+                Name = "string",
+                Created = new DateTime(),
+                Updated = new DateTime()
+            },
             Description= "string",
             Stock = 0,
             Price = 0,

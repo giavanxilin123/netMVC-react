@@ -7,7 +7,7 @@
         <div class="homepage-bg-carousel"></div>
     </div>
     <div style="text-align: center; margin: 50px 0" class="best-product">
-        <h3 style="margin-bottom: 50px">SẢN PHẨM BÁN CHẠY</h3>
+        <h3 style="margin-bottom: 50px">TOP SẢN PHẨM YÊU THÍCH</h3>
        
         <div class="carousel-row row">
             @* @foreach (var i in Model.productList)
@@ -23,7 +23,7 @@
                         </div>
                     </div>
             }     *@
-            @await Component.InvokeAsync("ProductList", Model.productList)
+            @await Component.InvokeAsync("ProductList", Model.bestProduct)
         </div>
         
        

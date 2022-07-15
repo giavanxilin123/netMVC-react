@@ -42,7 +42,7 @@
                 @* <div>Còn @Model.product.Stock Sản Phẩm</div> *@
                 @* <div>Average Rating: @Model.average</div> *@
                 <div class="stars">
-                    <form method="post"  asp-route-id="@Model.product.Id" asp-page="Detail">
+                    <form method="post" asp-route-id="@Model.product.Id" asp-page="Detail">
                         <input style="height: 100px; width: 570px" placeholder="Viết review đánh giá..." type="text-area" id="Review" name="Review">
                         <div style="display: flex; justify-content: space-between; align-items: center">
                             <div style="display: flex; flex-direction: row-reverse; justify-content: flex-end; margin: 10px 0">
