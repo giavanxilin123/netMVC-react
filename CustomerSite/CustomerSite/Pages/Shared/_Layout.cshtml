@@ -67,7 +67,7 @@
                            </div> *@
                         </div>
                         <div class="modal-footer">
-                            <button style="background-color: #f57f48; color: white; padding: 15px; width: 100%" type="button" class="btn">Proceed To Checkout</button>
+                            <button data-bs-dismiss="modal" onclick="checkOut()" style="background-color: #f57f48; color: white; padding: 15px; width: 100%" type="button" class="btn">Proceed To Checkout</button>
                         </div>
                         </div>
                     </div>
@@ -81,6 +81,13 @@
                         <li><a asp-page="/Register" class="dropdown-item">Đăng ký</a></li>
                         <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
                     </ul>
+                </div>
+            </div>
+            <div style="width: 100%" class="toast-container position-fixed top-0 center p-3">
+                <div id="liveToastCheckOut" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body">
+                        <i class="fa-solid fa-circle-check"></i> Đặt hàng thành công!!!
+                    </div>
                 </div>
             </div>
         </nav>
@@ -101,26 +108,154 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
-    var navLink = document.getElementsByClassName("nav-link")
-    
-    @* var navLink = [...navItem].map(x => x.getElementsByClassName("nav-link")[0]) *@
-    for (var i = 0; i < navLink.length; i++) {
-        navLink[i].addEventListener("click", function() {
-            var current = document.getElementsByClassName("active");
-            console.log(current)
-
-            // If there's no active class
-            if (current.length > 0) {
-            current[0].className = current[0].className.replace(" active", "");
-            }
-
-            // Add the active class to the current/clicked button
-            this.className += " active";
-        });
+        const cartBody = document.getElementById('cart-body');
+    const checkCartStorage = cart => {
+        if(window.localStorage.length == 0){
+            return []
+        }else {
+           return JSON.parse(window.localStorage.getItem("cart"))
+        }
     }
 
+    const domCart = _cart => {
+        cartBody.innerHTML = ''
+        if (_cart.length == 0){
+            cartBody.innerHTML = "Chưa có đơn hàng trong giỏ hàng !!!"
+        }
+        else {
+            _cart.forEach(c => {
+            let orderLine = document.createElement('div')
+            orderLine.className = 'order-line'
+            orderLine.cloneNode(true);
+            
+            let orderLineImage = document.createElement('div')
+            orderLineImage.className = 'orderline-image'
+
+            let img = document.createElement('img')
+            img.src = c.imagePath
+            orderLineImage.append(img)
+            
+            let orderLineName = document.createElement('div')
+            orderLineName.className = 'orderline-name'
+            orderLineName.innerText = c.name
+            
+            let orderLinePrice = document.createElement('div')
+            orderLinePrice.className = 'orderline-price'
+            orderLinePrice.innerText = c.price
+
+            let inputNumber = document.createElement("input")
+            inputNumber.id = c.id
+            inputNumber.type="number";
+            inputNumber.min = 0;
+            inputNumber.max = 10;
+            inputNumber.value = c.number
+            inputNumber.onchange = (e) => {
+                let index = _cart.findIndex(_c => _c.id === c.id)
+                let cartUpdate = [..._cart]
+                cartUpdate[index].number = e.target.value
+                window.localStorage.setItem("cart", JSON.stringify(cartUpdate))
+                domCart(cartUpdate);
+            }
+            
+            let divEmpty = document.createElement('div')
+            divEmpty.style = "width: 170px"
+            divEmpty.append(orderLineName, inputNumber ,orderLinePrice)
+
+            let orderLineDelete = document.createElement('button')
+            orderLineDelete.className = 'btn btn-danger'
+            orderLineDelete.innerHTML = 'x'
+            orderLineDelete.onclick = () => {
+                let cartRemove = _cart.filter(r => r.id !== c.id)
+                window.localStorage.setItem("cart", JSON.stringify(cartRemove))
+                domCart(cartRemove)
+            } 
+            
+
+            orderLine.append(orderLineImage, divEmpty, orderLineDelete)
+            
+            cartBody.append(orderLine)
+            })
+
+            const orderTotal = document.createElement('div')
+            orderTotal.id = 'order-total'
+
+            let totalName = document.createElement('div')
+            totalName.className = 'total-name'
+            totalName.innerHTML = 'TOTAL'
+            
+            total = _cart.map(c => c.price * c.number).reduce((a, b) => a + b)
+            var totalPrice = document.createElement('div')
+            totalPrice.className = 'total-price'
+            totalPrice.innerHTML = total
+
+            orderTotal.append(totalName, totalPrice)
+            cartBody.append(orderTotal)
+            }
+        }
+
+    var cart = []
+    var total = 0;
+
+    if (window.localStorage.length) {
+        cart = JSON.parse(localStorage.getItem("cart"))
+        domCart(cart)
+    }else {
+        cartBody.innerHTML = "Chưa có đơn hàng trong giỏ hàng  !!!"
+        cart = []
+    }
+   
+
+    const addToCart = (o) => {
+        var cart = checkCartStorage(cart)
+        order = {...o, number: 1}
+        var checkId = cart.map(x => x.id)
+
+        if (!checkId.includes(order.id)){
+            checkId.push(order.id)
+            cart.push(order)
+        }else {
+            let index = cart.findIndex(x => x.id === order.id)
+            cart[index].number ++ 
+        }
+        
+        window.localStorage.setItem("cart", JSON.stringify(cart))
+        domCart(cart)
+      
+        const toast = new bootstrap.Toast(toastLiveExample)
+        toast.show() 
+    }
+
+    const toastLiveExample = document.getElementById('liveToast')
     
+    
+    const checkOut = () => {
+        var cart = JSON.parse(localStorage.getItem('cart'))
+       
+        let orderLine = cart.map(x => {
+            return {
+                productId: x.id,
+                number: +x.number
+            }
+        })
+
+        let orderBodyRequest = {
+            userId: 1,
+            created: new Date(),
+            updated: new Date(),
+            orderLine: orderLine
+        }
+        axios.post("https://localhost:7010/api/order", orderBodyRequest)
+        .then(res => {
+            localStorage.removeItem("cart");
+            domCart([])
+            new bootstrap.Toast(document.getElementById('liveToastCheckOut')).show()
+        }).catch(err => {
+            console.log(err)
+        })
+
+    }
     </script>
 </body>
 </html>

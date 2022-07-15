@@ -22,6 +22,6 @@ namespace CustomerSite.Pages
             var result =  response.Content.ReadAsStringAsync().Result;    
             bestProduct = JsonConvert.DeserializeObject<List<Product>>(result);
             return Page();
-        }        
+        }     
     }
 }

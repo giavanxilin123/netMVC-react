@@ -33,13 +33,13 @@ namespace CustomerSite.Pages
             return Page();
         }
         
-        public async Task<IActionResult> OnPostId(int id) {
-            Console.WriteLine(id);
-            // HttpClient client = _api.initial();
-            // var response = await client.GetAsync($"api/product/getbycategories/{categories}");
-            // var result =  response.Content.ReadAsStringAsync().Result;
-            // productList = JsonConvert.DeserializeObject<List<Product>>(result);
-            return Page();
-        }
+        // public async Task<IActionResult> OnPostAsync() {
+        //     HttpClient client = _api.initial();
+        //     var response = await client.GetAsync("api/product/");
+        //     var result =  response.Content.ReadAsStringAsync().Result;
+        //     productList = JsonConvert.DeserializeObject<List<Product>>(result);
+        //     // Console.WriteLine(cart);
+        //     // return Page();
+        // }   
     }
 }
