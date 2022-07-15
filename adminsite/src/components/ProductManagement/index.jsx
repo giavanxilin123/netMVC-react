@@ -288,7 +288,7 @@ function ProductManagement() {
                      <div className="formgrid grid">
                      {category.map((c, index) => (
                           <div key={index} className="field-radiobutton col-6">
-                              <RadioButton inputId={`category${index}`} name="category" value={c} onChange={onCategoryChange} checked={product.category === 'Refresher'} />
+                              <RadioButton inputId={`category${index}`} name="category" value={c} onChange={onCategoryChange} checked={product.category.name === c.name} />
                               <label htmlFor="category1">{c.name}</label>
                           </div>
                       ))}
