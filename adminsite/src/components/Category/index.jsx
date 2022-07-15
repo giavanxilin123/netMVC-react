@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { classNames } from 'primereact/utils';
+import { useFormik } from 'formik';
+
 import {addCategoryRequest, deleteCategoryRequest, getCategoryRequest} from './services/request'
 import {handleApi} from '../../handleApi'
 import { DataTable } from 'primereact/datatable';
@@ -9,6 +10,7 @@ import { Button } from 'primereact/button';
 import { Toolbar } from 'primereact/toolbar';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { classNames } from 'primereact/utils';
 import './index.css';
 
 function CategoryManagement() {
@@ -25,6 +27,53 @@ function CategoryManagement() {
   const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
 
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+    },
+    validate: (data) => {
+      let errors = {}
+
+      if (data.name.length <=3){
+        errors.name = "Title of category is more than 3 characters."
+      }
+
+      return errors
+    },
+
+    onSubmit: (data) => {
+      let _category = {...category}
+      _category.name = data.name
+      setCategory(_category);
+      
+      let _categories = [...categories]
+      let date = new Date();
+      [_category.created, _category.updated] = new Array(2).fill(date)
+      
+      const addCategoryAsync = async (payload) => {
+        let result = await handleApi(addCategoryRequest(payload));
+        setCategory(result.data)
+        _categories.push(result.data);
+      }
+
+      addCategoryAsync(_category);
+      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Category Created', life: 3000 });
+    
+      setCategories(_categories);
+      setCategoryDialog(false);
+      setCategory(emptyCategory);
+      
+      formik.resetForm()
+    }
+  })
+
+  
+
+  const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+  const getFormErrorMessage = (name) => {
+      return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+  };
+
   useEffect(() => {
     const fetchCategoryAsync = async() => {
       let result = await handleApi(getCategoryRequest());
@@ -36,7 +85,6 @@ function CategoryManagement() {
 
   const openNew = () => {
     setCategory(emptyCategory)
-
     setSubmitted(false);
     setCategoryDialog(true);
   }
@@ -49,26 +97,26 @@ function CategoryManagement() {
     setDeleteCategoryDialog(false);
   }
 
-  const saveCategory = () => {
-    setSubmitted(true);
-    let _category = {...category};
-    let _categories = [...categories]
-    let date = new Date();
-    [_category.created, _category.updated] = new Array(2).fill(date)
+  // const saveCategory = () => {
+  //   setSubmitted(true);
+  //   let _category = {...category};
+  //   let _categories = [...categories]
+  //   let date = new Date();
+  //   [_category.created, _category.updated] = new Array(2).fill(date)
       
-    const addCategoryAsync = async (payload) => {
-      let result = await handleApi(addCategoryRequest(payload));
-      setCategory(result.data)
-      _categories.push(result.data);
-    }
+  //   const addCategoryAsync = async (payload) => {
+  //     let result = await handleApi(addCategoryRequest(payload));
+  //     setCategory(result.data)
+  //     _categories.push(result.data);
+  //   }
 
-    addCategoryAsync(_category);
-    toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Category Created', life: 3000 });
+  //   addCategoryAsync(_category);
+  //   toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Category Created', life: 3000 });
     
-    setCategories(_categories);
-    setCategoryDialog(false);
-    setCategory(emptyCategory);
-  }
+  //   setCategories(_categories);
+  //   setCategoryDialog(false);
+  //   setCategory(emptyCategory);
+  // }
 
   const confirmDeleteCategory = (category)=> {
     setCategory(category);
@@ -99,13 +147,6 @@ function CategoryManagement() {
     </div>
   );
 
-  const categoryDialogFooter = (
-    <React.Fragment>
-        <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-        <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveCategory} />
-    </React.Fragment>
-  );
-
   const leftToolbarTemplate = () => {
     return (
       <React.Fragment>
@@ -132,10 +173,10 @@ function CategoryManagement() {
 
   //methods
 
-  const onInputChange = (e, name) => {
+  const onInputChange = (e) => {
     const val = (e.target && e.target.value) || '';
     let _category = {...category};
-    _category[`${name}`] = val;
+    _category.name = val;
     setCategory(_category);
   }
 
@@ -163,13 +204,17 @@ function CategoryManagement() {
           </DataTable>
         </div>
 
-      <Dialog visible={categoryDialog} style={{ width: '450px' }} header="Add Category" modal className="p-fluid" footer={categoryDialogFooter} onHide={hideDialog}>
-              <div className="field">
-              <label htmlFor="title">Title</label>
-                  <InputText id="name" value ={category.name}  onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !category.name })} />
-                  {submitted && !category.name && <small className="p-error">Name is required.</small>}
-                 </div>
-        </Dialog>
+        
+          <Dialog visible={categoryDialog} style={{ width: '450px' }} header="Add Category" modal className="p-fluid"  onHide={hideDialog}>
+              <form onSubmit={formik.handleSubmit} className="p-fluid">
+                    <label htmlFor="name" >Name*</label>
+                    <InputText id="name" name="name" value ={formik.values.name} onChange={(e) => {onInputChange(e); formik.handleChange(e); }} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />
+                    {getFormErrorMessage('name')}
+                    <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+                    <Button label="Save" icon="pi pi-check" className="p-button-text" type="submit" />
+              </form>
+          </Dialog>
+       
 
           <Dialog visible={deleteCategoryDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteCategoryDialogFooter} onHide={hideDeleteCategoryDialog}>
             <div className="confirmation-content">

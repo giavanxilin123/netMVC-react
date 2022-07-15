@@ -192,7 +192,6 @@ function ProductManagement() {
     const val = (e.target && e.target.value) || '';
     let _product = {...product};
     _product[`${name}`] = val;
-
     setProduct(_product);
   }
 

@@ -16,6 +16,7 @@ render() {
             <Link to ="/user"><i style={{marginRight: "10px", lineHeight: "24px"}} className="pi pi-user"></i>User Management</Link>
             <Link to ="/product"><i style={{marginRight: "10px", lineHeight: "24px"}} className="pi pi-slack"></i>Product</Link> 
             <Link to ="/category"><i style={{marginRight: "10px", lineHeight: "24px"}} className="pi pi-box"></i>Category</Link>  
+            <Link to ="/validation"><i style={{marginRight: "10px", lineHeight: "24px"}} className="pi pi-box"></i>Validation</Link>  
             </div>
           </div>
     );
