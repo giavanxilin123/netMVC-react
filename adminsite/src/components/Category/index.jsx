@@ -24,7 +24,6 @@ function CategoryManagement() {
   const [deleteCategoryDialog, setDeleteCategoryDialog] = useState(false);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [categoryDialog, setCategoryDialog] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
 
   const formik = useFormik({
@@ -34,7 +33,7 @@ function CategoryManagement() {
     validate: (data) => {
       let errors = {}
 
-      if (data.name.length <=3){
+      if (data.name.length <= 3){
         errors.name = "Title of category is more than 3 characters."
       }
 
@@ -85,11 +84,9 @@ function CategoryManagement() {
 
   const openNew = () => {
     setCategory(emptyCategory)
-    setSubmitted(false);
     setCategoryDialog(true);
   }
   const hideDialog = () => {
-    setSubmitted(false);
     setCategoryDialog(false);
   }
 
@@ -187,9 +184,9 @@ function CategoryManagement() {
           <Dialog visible={categoryDialog} style={{ width: '450px' }} header="Add Category" modal className="p-fluid"  onHide={hideDialog}>
               <form onSubmit={formik.handleSubmit} className="p-fluid">
                     <label htmlFor="name" >Name*</label>
-                    <InputText id="name" name="name" value ={formik.values.name} onChange={(e) => {onInputChange(e); formik.handleChange(e); }} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />
+                    <InputText id="name" name="name" value ={category.name} onChange={(e) => {onInputChange(e); formik.handleChange(e); }} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />
                     {getFormErrorMessage('name')}
-                    <div style={{width: "30%", marginLeft: "auto"}}>
+                    <div style={{width: "30%", marginLeft: "auto", marginTop: "10px"}}>
                       <Button label="Save" icon="pi pi-check" className="p-button-text" type="submit" />
                     </div>
               </form>

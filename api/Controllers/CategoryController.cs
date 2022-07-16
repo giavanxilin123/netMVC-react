@@ -62,6 +62,20 @@ namespace api.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("DeleteById/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(int id) {
+            var categoryToDelete = await _context.Category.FindAsync(id);
+
+            if (categoryToDelete == null) return NotFound();
+
+            _context.Category.Remove(categoryToDelete);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 }
 
