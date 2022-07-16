@@ -97,27 +97,6 @@ function CategoryManagement() {
     setDeleteCategoryDialog(false);
   }
 
-  // const saveCategory = () => {
-  //   setSubmitted(true);
-  //   let _category = {...category};
-  //   let _categories = [...categories]
-  //   let date = new Date();
-  //   [_category.created, _category.updated] = new Array(2).fill(date)
-      
-  //   const addCategoryAsync = async (payload) => {
-  //     let result = await handleApi(addCategoryRequest(payload));
-  //     setCategory(result.data)
-  //     _categories.push(result.data);
-  //   }
-
-  //   addCategoryAsync(_category);
-  //   toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Category Created', life: 3000 });
-    
-  //   setCategories(_categories);
-  //   setCategoryDialog(false);
-  //   setCategory(emptyCategory);
-  // }
-
   const confirmDeleteCategory = (category)=> {
     setCategory(category);
     setDeleteCategoryDialog(true);
@@ -210,8 +189,9 @@ function CategoryManagement() {
                     <label htmlFor="name" >Name*</label>
                     <InputText id="name" name="name" value ={formik.values.name} onChange={(e) => {onInputChange(e); formik.handleChange(e); }} autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />
                     {getFormErrorMessage('name')}
-                    <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-                    <Button label="Save" icon="pi pi-check" className="p-button-text" type="submit" />
+                    <div style={{width: "30%", marginLeft: "auto"}}>
+                      <Button label="Save" icon="pi pi-check" className="p-button-text" type="submit" />
+                    </div>
               </form>
           </Dialog>
        
@@ -225,6 +205,5 @@ function CategoryManagement() {
       </div>
   )
 }
-
 
 export default CategoryManagement;
