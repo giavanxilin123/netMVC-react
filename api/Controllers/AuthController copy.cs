@@ -28,21 +28,16 @@ namespace api.Controllers
         // nhảy 400 khi tồn tại username
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<ActionResult<User>> Register(UserDto request)
+        public async Task<ActionResult<User>> Register(UserRegisterDto request)
         {
-            // var user = await _context.User.Where(x => x.Username == request.Username).FirstOrDefaultAsync();
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
             User user = new User();
             user.Username = request.Username;
             user.Name = request.Name;
-            user.Age = request.Age;
-            user.Address = request.Address;
-            user.PhoneNumber = request.PhoneNumber;
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.Name = request.Name;
-            user.Created = request.Created;
-            user.Updated = request.Updated;
+            user.Created = DateTime.Now;
+            user.Updated = DateTime.Now;
             await _context.User.AddAsync(user);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetByUsername), new { username = user.Username }, user);
@@ -54,11 +49,20 @@ namespace api.Controllers
         public async Task<IActionResult> GetByUsername(string username)
         {
             var user = await _context.User.Where(x => x.Username == username).FirstOrDefaultAsync();
+            var response = new UserResponseDto {
+                Username = user.Username,
+                Name = user.Name,
+                Address = user.Address,
+                Age = user.Age,
+                PhoneNumber = user.PhoneNumber,
+                Created = user.Created,
+                Updated = user.Updated,
+            };
             return user == null ? NotFound() : Ok(user);
         }        
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login(UserDto request){
+        public async Task<ActionResult<string>> Login(UserLoginDto request){
             var user = await _context.User.Where(x => x.Username == request.Username).FirstOrDefaultAsync();
             if (user == null)
             {
@@ -89,6 +93,8 @@ namespace api.Controllers
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
+                issuer: _configuration.GetSection("AppSettings:Token").Value,
+                audience: _configuration.GetSection("AppSettings:Token").Value,
                 claims: claims,
                 expires: DateTime.Now.AddDays(1),
                 signingCredentials: creds);

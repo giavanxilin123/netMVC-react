@@ -124,3 +124,4 @@
 /Users/admin/Desktop/Rookie5/Rookie_Ass1/api/bin/Debug/net6.0/Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
 /Users/admin/Desktop/Rookie5/Rookie_Ass1/api/bin/Debug/net6.0/Newtonsoft.Json.dll
 /Users/admin/Desktop/Rookie5/Rookie_Ass1/api/bin/Debug/net6.0/Newtonsoft.Json.Bson.dll
+/Users/admin/Desktop/Rookie5/Rookie_Ass1/api/bin/Debug/net6.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll

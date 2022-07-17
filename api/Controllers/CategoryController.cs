@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 namespace api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class CategoryController : ControllerBase
     {
         public readonly ChukChukDbContext _context;
@@ -48,7 +47,7 @@ namespace api.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
-        
+
         [HttpDelete("{name}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
