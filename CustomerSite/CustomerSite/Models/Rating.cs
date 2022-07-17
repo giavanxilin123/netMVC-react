@@ -5,7 +5,7 @@ namespace CustomerSite.Models
         public int RatingId {get; set;} 
         // public int UserId { get; set; }
 
-        public int UserId {get; set;} = 1;
+        public User User {get; set;} 
 
         public Product Product {get; set;} = new Product {
             Id = 0,

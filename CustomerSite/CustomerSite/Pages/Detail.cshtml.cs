@@ -56,9 +56,9 @@ namespace CustomerSite.Pages
             if (Request.Cookies["access_token"] == null){
                 return new RedirectToPageResult("Login");
             }
-            
+
             client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Request.Cookies["access_token"]);
-            rating.UserId = 1;
+            rating.Username = JsonConvert.DeserializeObject<UserResponseDto>(Request.Cookies["user"]).Username;
             rating.ProductId = id;
             rating.Score = Int32.Parse(Star);
             rating.Comment = Review;
