@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Globalization;
+using System.Net.Http.Headers;
 
 namespace CustomerSite.Pages
 {
@@ -47,6 +48,7 @@ namespace CustomerSite.Pages
         public async Task<IActionResult> OnPostAsync(int id){
             RatingDto rating = new RatingDto();
             HttpClient client = _api.initial();
+            client.DefaultRequestHeaders.Add("Authorization", "Bearer " + Request.Cookies["access_token"]);
             var response = await client.GetAsync($"api/product/{id}");
             var result =  response.Content.ReadAsStringAsync().Result;
             product = JsonConvert.DeserializeObject<Product>(result);
@@ -56,8 +58,8 @@ namespace CustomerSite.Pages
             rating.Score = Int32.Parse(Star);
             rating.Comment = Review;
  
-            await client.PostAsJsonAsync("/api/Rating", rating);
-            
+            var kk = await client.PostAsJsonAsync("/api/Rating", rating);
+               
             var response1 = await client.GetAsync($"api/rating/getaveragescore/{id}");
             average = Math.Round(double.Parse(response1.Content.ReadAsStringAsync().Result, CultureInfo.InvariantCulture.NumberFormat) * 2);
 

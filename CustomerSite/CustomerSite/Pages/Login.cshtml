@@ -1,14 +1,14 @@
 @page
-@model CustomerSite.Pages.RegisterModel
+@model CustomerSite.Pages.LoginModel
 @{
     <div class="row">
-        <div class="register-bg col-6">
-            <div class="register-title">
-                Đăng ký
+        <div class="login-bg col-6">
+            <div class="login-title">
+                Đăng nhập
             </div>
         </div>
-        <div class="register-form col-6">
-            <form method="post" asp-page="Register" class="row g-3">
+        <div class="login-form col-6">
+            <form method="post" asp-page="Login" class="row g-3">
                 <div>
                     <label for="username" class="visually-hidden">Username</label>
                     <input name="username" type="text"  class="form-control-plaintext" id="username" placeholder="Username">
@@ -18,11 +18,7 @@
                     <input name="password" type="password"  class="form-control-plaintext" id="password" placeholder="Password">
                 </div>
                 <div>
-                    <label for="fullname" class="visually-hidden">Full Name</label>
-                    <input name="name" type="text"  class="form-control-plaintext" id="name" placeholder="Fullname">
-                </div>
-                <div>
-                    <button type="submit" class="btn mb-3">Đăng ký</button>
+                    <button type="submit" class="btn mb-3">Đăng nhập</button>
                 </div>
             </form>
         </div>
@@ -30,12 +26,12 @@
 }
 
 <style>
-    .register-bg {
+    .login-bg {
         background-color: #f57f48;
         height: 600px; 
         position: relative;
     }
-    .register-title {
+    .login-title {
         color: white;
         font-size: 60px;
         position: absolute;
@@ -43,25 +39,43 @@
         top: 50%;
         transform: translate(50%, -50%);
     }
-    .register-form .row {
+    .login-form .row {
         width: 70%;
         margin: 0 auto;
     }
-    .register-form button {
+    .login-form button {
         background-color: #f57f48;
         color: white;
         padding: 15px 40px;
     }
 
-    .register-form button:hover {
+    .login-form button:hover {
         background-color: #f57f48;
         color: white;
     }
 
-    .register-form .form-control-plaintext {
+    .login-form .form-control-plaintext {
         padding: 15px;
         background-color: #f8f8f8;
     }
 
 </style>
 
+<script>
+    @* import axios from 'axios' *@
+    @* const login = () => {
+        let loginRequest = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+        }
+        axios.post("https://localhost:7010/api/auth/login", loginRequest)
+        .then(res => {
+            new bootstrap.Toast(document.getElementById('loginSuccessToast')).show()
+            console.log(res.data)
+        }).catch(err => {
+            new bootstrap.Toast(document.getElementById('loginErrorToast')).show()
+            console.log(err)
+        })
+        return false
+    } *@
+</script>

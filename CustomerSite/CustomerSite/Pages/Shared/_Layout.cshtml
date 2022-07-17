@@ -1,15 +1,22 @@
-﻿<!DOCTYPE html>
+﻿@using Newtonsoft.Json;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CustomerSite</title>
+    <title>@ViewData["Title"] Chuk Chuk</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="~/CustomerSite.styles.css" asp-append-version="true" />
 </head>
+
+@{
+    string token = Context.Request.Cookies["access_token"];
+    string user = Context.Request.Cookies["user"];
+    var userResponse = user != null ? JsonConvert.DeserializeObject<UserResponseDto>(user) : new UserResponseDto();
+}
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
@@ -49,22 +56,6 @@
                         </div>
 
                         <div id="cart-body" class="modal-body">
-                           @* <div class="order-line">
-                                <div class="orderline-img">
-                                    <img src="https://product.hstatic.net/200000399631/product/ca_phe_sua__da__927c994afcc944a0860a6c174e65f729_1024x1024.jpg" alt="">
-                                </div>
-                                <div>
-                                    <div class="orderline-name">
-                                        Soda Xoài Xanh Muối Ớt
-                                    </div>
-                                    <input style="margin: 10px" type="number" min="0" max="20">
-                                    <div class="orderline-price">39,000đ</div>
-                                </div>
-                           </div>
-                           <div id="order-total">
-                               <div class="total-name">TOTAL</div>
-                               <div id="total-price">39.000đ</div>
-                           </div> *@
                         </div>
                         <div class="modal-footer">
                             <button data-bs-dismiss="modal" onclick="checkOut()" style="background-color: #f57f48; color: white; padding: 15px; width: 100%" type="button" class="btn">Proceed To Checkout</button>
@@ -77,10 +68,19 @@
                     <button class="dropdown-btn" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                        <i class="fa-solid fa-bars signature-color bar"></i>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
-                        <li><a asp-page="/Register" class="dropdown-item">Đăng ký</a></li>
-                        <li><a class="dropdown-item" href="#">Đăng nhập</a></li>
-                    </ul>
+                    @if (token == null){
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
+                            <li><a asp-page="/Register" class="dropdown-item"><i style="margin-right: 5px;" class="fa-solid fa-registered"></i>Đăng ký</a></li>
+                            <li><a class="dropdown-item" asp-page="/Login"><i style="margin-right: 5px;" class="fa-solid fa-arrow-right-from-bracket"></i>Đăng nhập</a></li>
+                        </ul>
+                    }else {
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1" style="">
+                            <li><a asp-page="/Account" class="dropdown-item"><i style="margin-right: 5px;" class="fa-solid fa-registered"></i>@userResponse.Username</a></li>
+                            <form onsubmit="return logOut()">
+                                 <button style="border: none; margin-left: 12px; background: white;" type="submit"><i style="margin-right: 5px;" class="fa-solid fa-arrow-right-from-bracket"></i> Đăng xuất</button>
+                             </form>
+                        </ul>
+                    }
                 </div>
             </div>
             <div style="width: 100%" class="toast-container position-fixed top-0 center p-3">
@@ -99,9 +99,6 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        @* <div class="container">
-            &copy; 2022 - CustomerSite - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div> *@
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -254,9 +251,18 @@
         }).catch(err => {
             console.log(err)
         })
-
     }
-    </script>
+
+    function delete_cookie(name) {
+        document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+    }  
+    const logOut = () => {
+        delete_cookie("user")
+        delete_cookie("access_token")
+        location.href = 'https://localhost:7134/'
+        return false
+    }
+</script>
 </body>
 </html>
 
@@ -325,7 +331,9 @@
     #cart-body {
         overflow: auto;
     }
-
+    .dropdown-menu {
+        font-size: 14px;
+    }
 </style>
 
 
