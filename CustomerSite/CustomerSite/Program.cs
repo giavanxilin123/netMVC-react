@@ -18,6 +18,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+// app.UseSession();
 
 app.UseRouting();
 
@@ -31,6 +32,8 @@ app.UseAuthorization();
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 // app.MapRazorPages();
+
+
 
 app.UseEndpoints(endpoints => {
     endpoints.MapRazorPages();

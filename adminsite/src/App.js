@@ -10,6 +10,7 @@ import Dashboard from './components/Dashboard';
 import UserManagement from './components/UserManagement';
 import ProductManagement from './components/ProductManagement';
 import Category from './components/Category';
+import Validation from './components/HandleValidation';
 
 import { Menubar } from 'primereact/menubar';
 import { Button } from 'primereact/button';
@@ -162,6 +163,7 @@ function App() {
                 <Route path="/user" element={<UserManagement/>} />
                 <Route path="/product" element={<ProductManagement/>} />
                 <Route path="/category" element={<Category/>} />
+                <Route path="/validation" element={<Validation/>} />
             </Routes>
           </div>
         </div>

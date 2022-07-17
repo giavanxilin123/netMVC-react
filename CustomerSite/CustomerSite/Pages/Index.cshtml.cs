@@ -22,6 +22,16 @@ namespace CustomerSite.Pages
             var result =  response.Content.ReadAsStringAsync().Result;    
             bestProduct = JsonConvert.DeserializeObject<List<Product>>(result);
             return Page();
-        }     
+        }
+
+        // public async Task<IActionResult> OnPostAsync(){
+        //     HttpClient client = _api.initial();
+        //     var response = await client.GetAsync("api/product/getBestSeller");
+        //     var result =  response.Content.ReadAsStringAsync().Result;    
+        //     bestProduct = JsonConvert.DeserializeObject<List<Product>>(result);
+        //     Response.Cookies.Delete("access_token");
+        //     Response.Cookies.Delete("user");
+        //     return Page();
+        // } 
     }
 }

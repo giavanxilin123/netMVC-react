@@ -6,7 +6,6 @@ import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Toast } from 'primereact/toast';
 import { Button } from 'primereact/button';
-// import { Rating } from 'primereact/rating';
 import { FileUpload } from 'primereact/fileupload';
 import { Toolbar } from 'primereact/toolbar';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -14,13 +13,14 @@ import { RadioButton } from 'primereact/radiobutton';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
+import { useFormik } from 'formik';
 import './index.css';
 
 function ProductManagement() {
   let emptyProduct = {
     id: 0,
     name: '',
-    imagePath: null,
+    imagePath: 'product-placeholder.svg',
     description: '',
     category: {
       id: 0,
@@ -29,29 +29,97 @@ function ProductManagement() {
     price: 0,
     stock: 0,
     created: '',
-    updated: ''
+    updated: '',
   };
+
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([])
   const [deleteProductDialog, setDeleteProductDialog] = useState(false);
   const [globalFilter, setGlobalFilter] = useState(null);
   const [productDialog, setProductDialog] = useState(false);
   const [product, setProduct] = useState(emptyProduct);
-  const [submitted, setSubmitted] = useState(false);
   const toast = useRef(null);
-  // const [totalSize, setTotalSize] = useState(0);
+
+  const formik = useFormik({
+    initialValues: {
+      name:  '',
+      description: '',
+      price: 0,
+      category: ''
+    },
+    validate: (data) => {
+      let errors = {}
+
+      if (data.name.length <= 3){
+        errors.name = "The name of product is more than 3 characters."
+      }
+
+      if (!data.description) {
+        errors.description = 'Description is required.'
+      }
+
+      if (+data.price <= 0) {
+        errors.price = 'Price must be larger than 0.'
+      }
+      
+      if (!data.category) {
+        errors.category = "You must choose category of product."
+      }
+
+      return errors
+    },
+    onSubmit: () => {
+      let _product = {...product}
+      let _products = [...products]
+      
+      if (product.id === 0){
+        let date = new Date();
+        [_product.created, _product.updated] = new Array(2).fill(date)
+
+        const addProductAsync = async (payload) => {
+          let result = await handleApi(addProductRequest(payload));
+          console.log("result", result)
+          // dùng setProduct _product là m đi chắc tại _product đang chơi thằng id = 0
+          setProduct(result.data)
+          _products.push(result.data);
+        }
+        addProductAsync(_product);
+        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+      } else {
+        const index = _products.findIndex(p => p.id === product.id) 
+        _products[index] = _product;
+
+        let date = new Date();
+        _product.updated = date;
+        toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+      
+        _product.categoryId = _product.category.id;
+        (async(p) => {
+          await handleApi(updateProductRequest(p))
+        })(_product)
+      }
+      
+      setProducts(_products);
+      setProductDialog(false);
+      setProduct(emptyProduct);
+      
+      formik.resetForm()
+    }
+  })
+
+  const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+  const getFormErrorMessage = (name) => {
+      return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
+  };
 
   useEffect(() => {
     const fetchDataAsync = async() => {
       let result = await handleApi(getProductRequest());
       setProducts(result.data)
-      // let uniqueCate = [... new Set(result.data.map(x => x.category.name))]
-      // setCategory(uniqueCate)
     }
 
     const fetchCategoryAsync = async() => {
       let result = await handleApi(getCategoryRequest());
-      // let categoryName = result.data.map(c => c.name);
       setCategory(result.data)
     }
 
@@ -60,13 +128,15 @@ function ProductManagement() {
   }, [])
 
   const openNew = () => {
+    formik.values.name = ''
+    formik.values.description = ''
+    formik.values.price = 0
+    formik.values.category = ''
     setProduct(emptyProduct);
-    setSubmitted(false);
     setProductDialog(true);
   }
 
   const hideDialog = () => {
-    setSubmitted(false);
     setProductDialog(false);
   }
 
@@ -74,47 +144,11 @@ function ProductManagement() {
     setDeleteProductDialog(false);
   }
 
-  const saveProduct = () => {
-    setSubmitted(true);
-    //clone 
-    let _products = [...products];
-    let _product = {...product};
-
-    if (product.id) {
-      //update view
-      const index = _products.findIndex(p => p.id === product.id) 
-      _products[index] = _product;
-
-      let date = new Date();
-      _product.updated = date;
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-     
-      _product.categoryId = _product.category.id;
-      (async(p) => {
-        await handleApi(updateProductRequest(p))
-      })(_product)
-    }
-    else {
-      // _product.imagePath = 'product-placeholder.svg';
-      let date = new Date();
-      [_product.created, _product.updated] = new Array(2).fill(date)
-      
-      const addProductAsync = async (payload) => {
-        let result = await handleApi(addProductRequest(payload));
-        setProduct(result.data)
-        _products.push(result.data);
-      }
-
-      addProductAsync(_product);
-      toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-    }
-    
-    setProducts(_products);
-    setProductDialog(false);
-    setProduct(emptyProduct);
-  }
-
   const editProduct = (product) => {
+    formik.values.name = product.name;
+    formik.values.description = product.description;
+    formik.values.price = product.price
+    formik.values.category = product.category.name
     setProduct({...product});
     setProductDialog(true);
   }
@@ -137,7 +171,6 @@ function ProductManagement() {
     })(id)
 }
 
-  //templates
   const header = (
     <div className="table-header">
         <h5 className="mx-0 my-1">Manage Products</h5>
@@ -148,12 +181,6 @@ function ProductManagement() {
     </div>
   );
 
-  const productDialogFooter = (
-    <React.Fragment>
-        <Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-        <Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveProduct} />
-    </React.Fragment>
-  );
 
   const leftToolbarTemplate = () => {
     return (
@@ -192,7 +219,6 @@ function ProductManagement() {
     const val = (e.target && e.target.value) || '';
     let _product = {...product};
     _product[`${name}`] = val;
-
     setProduct(_product);
   }
 
@@ -235,7 +261,7 @@ function ProductManagement() {
   const uploadImage = async (event) => {
     const file = event.files[0];
     const reader = new FileReader();
-    let blob = await fetch(file.objectURL).then(r => r.blob()); //blob:url
+    let blob = await fetch(file.objectURL).then(r => r.blob()); 
     reader.readAsDataURL(blob); 
     reader.onloadend = function () {
         const base64data = reader.result;
@@ -257,54 +283,59 @@ function ProductManagement() {
             <Column header="Image" body={imageBodyTemplate}></Column>
             <Column field="price" header="Price" body={priceBodyTemplate} sortable style={{ minWidth: '8rem' }}></Column>
             <Column field="category.name" header="Category" sortable style={{ minWidth: '10rem' }}></Column>
-            {/* <Column field="id" header="Rating" body={ratingBodyTemplate} sortable style={{ minWidth: '12rem' }}></Column> */}
             <Column field="created" header="Created" body={createdBodyTemplate}></Column>
             <Column field="created" header="Updated" body={updatedBodyTemplate}></Column>
             <Column header="Status" body={statusBodyTemplate}></Column>
             <Column header="Action" body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
           </DataTable>
+          
         </div>
 
-      <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                <div className="field">
+      <Dialog visible={productDialog} style={{ width: '450px' }} header="Product Details" modal className="p-fluid" onHide={hideDialog}>
+            <form onSubmit={formik.handleSubmit} className ="p-fluid">
+              <div className="field">
                     <div>Upload Image</div>
                     <FileUpload mode="basic" name="demo[]"  accept="image/*" customUpload auto uploadHandler={uploadImage} />
                     {product.imagePath && <img src={`${product.imagePath}`} onError={(e) => e.target.src='https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png'} alt={product.image} className="product-image block m-auto pb-3" />}
-                </div>
-               
-                 <div className="field">
-                     <label htmlFor="name">Name</label>
-                     <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
-                     {submitted && !product.name && <small className="p-error">Name is required.</small>}
-                 </div>
-                 <div className="field">
-                     <label htmlFor="description">Description</label>
-                     <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
-                 </div>
+              </div>
 
-                 <div className="field">
-                     {/* <Button label="Add Category" icon="pi pi-upload" className="p-button-help" onClick={addCategory} /> */}
+              <div className="field">
+                  <label htmlFor="name">Name</label>
+                  <InputText id="name" name ="name" value={formik.values.name} onChange={(e) => {formik.handleChange(e); onInputChange(e, 'name'); }}  autoFocus className={classNames({ 'p-invalid': isFormFieldValid('name') })} />
+                  {getFormErrorMessage('name')}
+              </div>
+              <div className="field">
+                  <label htmlFor="description">Description</label>
+                  <InputTextarea id="description" name="description" value={formik.values.description} onChange={(e) => {onInputChange(e, 'description'); formik.handleChange(e)}}  rows={3} cols={20} />
+                  {getFormErrorMessage('description')}
+              </div>
+              <div className="field">
                      <label className="mb-3">Category</label>
                      <div className="formgrid grid">
                      {category.map((c, index) => (
-                          <div key={index} className="field-radiobutton col-6">
-                              <RadioButton inputId={`category${index}`} name="category" value={c} onChange={onCategoryChange} checked={product.category.name === c.name} />
-                              <label htmlFor="category1">{c.name}</label>
-                          </div>
+                        <div key={index} className="field-radiobutton col-6">
+                            <RadioButton inputId={`category${index}`} name="category" value={c} onChange={(e) => {onCategoryChange(e); formik.handleChange(e)}} checked={product.category.name === c.name} />
+                            <label htmlFor="category1">{c.name}</label>
+                        </div>
                       ))}
+                      {getFormErrorMessage('category')}
                      </div>
                 </div>
-
-                 <div className="formgrid grid">
-                     <div className="field col">
-                         <label htmlFor="price">Price</label>
-                         <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="VND" locale="en-US" />
+                <div className="formgrid grid">
+                    <div className="field col">
+                      <label htmlFor="price">Price</label>
+                      <InputNumber id="price" value={formik.values.price} onValueChange={(e) => {onInputNumberChange(e, 'price'); formik.handleChange(e)}} mode="currency" currency="VND" locale="en-US" />
+                      {getFormErrorMessage('price')}
                      </div>
                      <div className="field col">
                          <label htmlFor="stock">Stock</label>
-                         <InputNumber id="stock" value={product.stock} onValueChange={(e) => onInputNumberChange(e, 'stock')} integeronly="true" />
+                        <InputNumber id="stock" value={product.stock} onValueChange={(e) => {onInputNumberChange(e, 'stock')}} integeronly="true" />
                      </div>
                  </div>
+                 <div style={{width: "30%", marginLeft: "auto", marginTop: "10px"}}>
+                      <Button label="Save" icon="pi pi-check" className="p-button-text" type="submit" />
+                  </div>
+            </form>
         </Dialog>
         <Dialog visible={deleteProductDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
             <div className="confirmation-content">

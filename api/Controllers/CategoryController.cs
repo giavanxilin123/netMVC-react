@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 namespace api.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class CategoryController : ControllerBase
     {
         public readonly ChukChukDbContext _context;
@@ -48,12 +47,26 @@ namespace api.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = category.Id }, category);
         }
-        
+
         [HttpDelete("{name}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(string name) {
             var categoryToDelete = await _context.Category.Where(x => x.Name ==  name).FirstOrDefaultAsync();
+
+            if (categoryToDelete == null) return NotFound();
+
+            _context.Category.Remove(categoryToDelete);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete("DeleteById/{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Delete(int id) {
+            var categoryToDelete = await _context.Category.FindAsync(id);
 
             if (categoryToDelete == null) return NotFound();
 

@@ -8,17 +8,21 @@
             </div>
         </div>
         <div class="register-form col-6">
-            <form class="row g-3">
+            <form method="post" asp-page="Register" class="row g-3">
                 <div>
                     <label for="username" class="visually-hidden">Username</label>
-                    <input type="text" class="form-control-plaintext" id="username" placeholder="Username">
+                    <input name="username" type="text"  class="form-control-plaintext" id="username" placeholder="Username">
                 </div>
                 <div>
                     <label for="password" class="visually-hidden">Password</label>
-                    <input type="password" class="form-control-plaintext" id="password" placeholder="Password">
+                    <input name="password" type="password"  class="form-control-plaintext" id="password" placeholder="Password">
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+                    <label for="fullname" class="visually-hidden">Full Name</label>
+                    <input name="name" type="text"  class="form-control-plaintext" id="name" placeholder="Fullname">
+                </div>
+                <div>
+                    <button type="submit" class="btn mb-3">Đăng ký</button>
                 </div>
             </form>
         </div>
@@ -39,5 +43,25 @@
         top: 50%;
         transform: translate(50%, -50%);
     }
+    .register-form .row {
+        width: 70%;
+        margin: 0 auto;
+    }
+    .register-form button {
+        background-color: #f57f48;
+        color: white;
+        padding: 15px 40px;
+    }
+
+    .register-form button:hover {
+        background-color: #f57f48;
+        color: white;
+    }
+
+    .register-form .form-control-plaintext {
+        padding: 15px;
+        background-color: #f8f8f8;
+    }
+
 </style>
 

@@ -1,0 +1,86 @@
+@page
+@model CustomerSite.Pages.AccountModel
+
+@{
+    @* string user = Context.Request.Cookies["user"]; *@
+}
+@{
+    <div class="row">
+        <div class="account-bg col-6">
+            <div class="account-title">
+                Tài khoản của @Model.user.Name
+            </div>
+        </div>
+        @* <div class="account-form col-6">
+            <form method="post" asp-page="Account" class="row g-3">
+                <div>
+                    <label for="username" class="visually-hidden">Username</label>
+                    <input name="username" type="text"  class="form-control-plaintext" id="username" placeholder="Username">
+                </div>
+                <div>
+                    <label for="password" class="visually-hidden">Password</label>
+                    <input name="password" type="password"  class="form-control-plaintext" id="password" placeholder="Password">
+                </div>
+                <div>
+                    <button type="submit" class="btn mb-3">Đăng nhập</button>
+                </div>
+            </form>
+        </div> *@
+    </div>
+}
+
+<style>
+    .account-bg {
+        background-color: #f57f48;
+        height: 600px; 
+        position: relative;
+    }
+    .account-title {
+        color: white;
+        font-size: 50px;
+        position: absolute;
+        right: 50%;
+        top: 50%;
+        transform: translate(50%, -50%);
+    }
+    .account-form .row {
+        width: 70%;
+        margin: 0 auto;
+    }
+    .account-form button {
+        background-color: #f57f48;
+        color: white;
+        padding: 15px 40px;
+    }
+
+    .account-form button:hover {
+        background-color: #f57f48;
+        color: white;
+    }
+
+    .account-form .form-control-plaintext {
+        padding: 15px;
+        background-color: #f8f8f8;
+    }
+
+</style>
+
+
+<script>
+    @* import axios from 'axios' *@
+    @* const account = () => {
+        let accountRequest = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value
+        }
+        axios.post("https://localhost:7010/api/auth/account", accountRequest)
+        .then(res => {
+            new bootstrap.Toast(document.getElementById('accountSuccessToast')).show()
+            console.log(res.data)
+        }).catch(err => {
+            new bootstrap.Toast(document.getElementById('accountErrorToast')).show()
+            console.log(err)
+        })
+        return false
+    } *@
+</script>
