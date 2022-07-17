@@ -33,6 +33,8 @@ app.UseAuthorization();
 
 // app.MapRazorPages();
 
+
+
 app.UseEndpoints(endpoints => {
     endpoints.MapRazorPages();
 });
