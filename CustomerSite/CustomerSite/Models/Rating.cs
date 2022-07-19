@@ -26,5 +26,8 @@ namespace CustomerSite.Models
         public int Score {get; set;}
 
         public string Comment {get; set;} = "Ngon!";
+        public DateTime Created {get; set;}
+
+        public DateTime Updated {get; set;}
     }
 }

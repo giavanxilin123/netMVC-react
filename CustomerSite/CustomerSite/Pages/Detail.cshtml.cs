@@ -62,7 +62,7 @@ namespace CustomerSite.Pages
             rating.ProductId = id;
             rating.Score = Int32.Parse(Star);
             rating.Comment = Review;
-            var kk = await client.PostAsJsonAsync("/api/Rating", rating);
+            await client.PostAsJsonAsync("/api/Rating", rating);
 
             var response1 = await client.GetAsync($"api/rating/getaveragescore/{id}");
             average = Math.Round(double.Parse(response1.Content.ReadAsStringAsync().Result, CultureInfo.InvariantCulture.NumberFormat) * 2);

@@ -39,8 +39,7 @@
                     <button class="product-buy"><i style="margin: 0 5px;" class="fa-solid fa-store"></i>Mua tại cửa hàng</button>
                     <button class="product-buy"><i style="margin: 0 5px;" class="fa-solid fa-glass-water"></i>Mua mang đi</button>
                 </div>
-                @* <div>Còn @Model.product.Stock Sản Phẩm</div> *@
-                @* <div>Average Rating: @Model.average</div> *@
+                
                 <div class="stars">
                     <form method="post" asp-route-id="@Model.product.Id" asp-page="Detail">
                         <input style="height: 100px; width: 570px" placeholder="Viết review đánh giá..." type="text-area" id="Review" name="Review">
@@ -103,8 +102,8 @@
                                     }
                                 }
                             </div>
-                            <div class="date-review">2022-06-29 14:42</div>
-                            <div class="user-post">@r.Comment</div>
+                            <div class="date-review">@r.Comment</div>
+                            <div class="user-post">15-07-2022</div>
                             <div class="user-img-review">
                                 <img src="https://images.foody.vn/res/g112/1115261/s180x180/foody-chuk-chuk-tra-ca-phe-ttc-group-617-637763077485626492.jpg" alt="">
                                 <img src="https://images.foody.vn/res/g112/1115261/s180x180/foody-chuk-chuk-tra-ca-phe-ttc-group-876-637763293334020313.jpg" alt="">

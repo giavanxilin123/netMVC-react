@@ -1,6 +1,10 @@
 ﻿@using Newtonsoft.Json;
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment env
+@{ 
+ var path = env.WebRootFileProvider.GetFileInfo("images/footer.png")?.PhysicalPath;
+}
 <!DOCTYPE html>
-<html lang="en">
+<html style="height: 100vh" lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -30,11 +34,29 @@
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             @*<a class="nav-link text-dark active" asp-area="" asp-controller="Home" asp-action="Index">Trang chủ</a>*@
-                            <a class="nav-link text-dark active" asp-area="" asp-page="/Index">Trang chủ</a>
+                            <a class="nav-link text-dark active" asp-area="" asp-page="/Index">TRANG CHỦ</a>
                         </li>
                        
                          <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Product">Sản phẩm</a>
+                            <a class="nav-link text-dark" asp-area="" asp-page="/Product">SẢN PHẨM</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" >TIN TỨC</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" >THÔNG TIN ƯU ĐÃI</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" >LIÊN HỆ</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" >THÔNG TIN CỬA HÀNG</a>
+                        </li>
+                         <li class="nav-item">
+                            <a class="nav-link text-dark" >THẺ THÀNH VIÊN</a>
                         </li>
                     </ul>
                 </div>
@@ -58,7 +80,7 @@
                         <div id="cart-body" class="modal-body">
                         </div>
                         <div class="modal-footer">
-                            <button data-bs-dismiss="modal" onclick="checkOut()" style="background-color: #f57f48; color: white; padding: 15px; width: 100%" type="button" class="btn">Proceed To Checkout</button>
+                            <button data-bs-dismiss="modal" onclick="checkOut(`@userResponse.Username`)" style="background-color: #f57f48; color: white; padding: 15px; width: 100%" type="button" class="btn">Proceed To Checkout</button>
                         </div>
                         </div>
                     </div>
@@ -84,21 +106,27 @@
                 </div>
             </div>
             <div style="width: 100%" class="toast-container position-fixed top-0 center p-3">
-                <div id="liveToastCheckOut" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-body">
+                <div id="liveToastCheckOutSuccess" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body toast-body-success">
                         <i class="fa-solid fa-circle-check"></i> Đặt hàng thành công!!!
+                    </div>
+                </div>
+                <div id="liveToastCheckOutError" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-body toast-body-error">
+                        <i class="fa-solid fa-circle-check"></i> Bạn cần phải đăng nhập trước khi đặt hàng!!!
                     </div>
                 </div>
             </div>
         </nav>
     </header>
     <div>
-        <main role="main" class="pb-3">
+        <main role="main">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    <footer  class="border-top footer text-muted">
+        <img style="width: 100%" src="~/images/footer.png" alt="">
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -115,7 +143,8 @@
            return JSON.parse(window.localStorage.getItem("cart"))
         }
     }
-
+    
+    
     const domCart = _cart => {
         cartBody.innerHTML = ''
         if (_cart.length == 0){
@@ -203,7 +232,7 @@
         cart = []
     }
    
-
+    
     const addToCart = (o) => {
         var cart = checkCartStorage(cart)
         order = {...o, number: 1}
@@ -226,10 +255,8 @@
 
     const toastLiveExample = document.getElementById('liveToast')
     
-    
-    const checkOut = () => {
+    const checkOut = (username) => {
         var cart = JSON.parse(localStorage.getItem('cart'))
-       
         let orderLine = cart.map(x => {
             return {
                 productId: x.id,
@@ -238,7 +265,7 @@
         })
 
         let orderBodyRequest = {
-            userId: 1,
+            username: username,
             created: new Date(),
             updated: new Date(),
             orderLine: orderLine
@@ -247,10 +274,13 @@
         .then(res => {
             localStorage.removeItem("cart");
             domCart([])
-            new bootstrap.Toast(document.getElementById('liveToastCheckOut')).show()
+            new bootstrap.Toast(document.getElementById('liveToastCheckOutSuccess')).show()
         }).catch(err => {
             console.log(err)
-        })
+            new bootstrap.Toast(document.getElementById('liveToastCheckOutError')).show()
+            @* location.href = 'https://localhost:7134/login' *@
+            
+        }) 
     }
 
     function delete_cookie(name) {
@@ -332,6 +362,19 @@
         overflow: auto;
     }
     .dropdown-menu {
+        font-size: 14px;
+    }
+    .toast-body-error {
+        background-color: #fef0f0;
+        border-color: #e1f3d8;
+        color: #f56c6c;
+    }
+    .toast-body-success {
+        background-color: #f0f9eb;
+        border-color: #e1f3d8;
+        color: #67c23a
+    }
+    .nav-link {
         font-size: 14px;
     }
 </style>

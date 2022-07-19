@@ -11,21 +11,21 @@
                 Tài khoản của @Model.user.Name
             </div>
         </div>
-        @* <div class="account-form col-6">
-            <form method="post" asp-page="Account" class="row g-3">
-                <div>
-                    <label for="username" class="visually-hidden">Username</label>
-                    <input name="username" type="text"  class="form-control-plaintext" id="username" placeholder="Username">
-                </div>
-                <div>
-                    <label for="password" class="visually-hidden">Password</label>
-                    <input name="password" type="password"  class="form-control-plaintext" id="password" placeholder="Password">
-                </div>
-                <div>
-                    <button type="submit" class="btn mb-3">Đăng nhập</button>
-                </div>
-            </form>
-        </div> *@
+        <div class="account-form col-6">
+            <h4 style="border-bottom: 1px solid #ededed; padding-bottom: 10px;">THÔNG TIN TÀI KHOẢN</h4>
+            <div class="account__name">
+                @Model.user.Name
+            </div>
+            <div class="account__username">
+                @Model.user.Username
+            </div>
+            <div class="account__email">
+                @(Model.user.Username + "@gmail.com")
+            </div>
+            <div class="account__address">
+                Vietnam
+            </div>
+        </div>
     </div>
 }
 
@@ -61,6 +61,13 @@
     .account-form .form-control-plaintext {
         padding: 15px;
         background-color: #f8f8f8;
+    }
+    .account-form {
+        padding: 50px;
+    }
+
+    .account__name {
+        font-weight: 700;
     }
 
 </style>

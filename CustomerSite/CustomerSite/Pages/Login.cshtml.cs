@@ -22,6 +22,8 @@ namespace CustomerSite.Pages
         [BindProperty]
         public string password {get; set;}
 
+        public bool Toast {get; set;} = false;
+
         public UserResponseDto user = new UserResponseDto();
 
         public async Task<IActionResult> OnPostAsync(){
@@ -46,6 +48,6 @@ namespace CustomerSite.Pages
             return Page();
         }
 
-        
+
     }
 }

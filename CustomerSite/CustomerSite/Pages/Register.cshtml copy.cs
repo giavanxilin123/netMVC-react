@@ -31,8 +31,6 @@ namespace CustomerSite.Pages
             };
             HttpClient client = _api.initial();
             var response = await client.PostAsJsonAsync("api/auth/register", UserDto);
-            // var result =  response.Content.ReadAsStringAsync().Result;
-            Console.WriteLine("response: " + (int)response.StatusCode);
             if ((int)response.StatusCode == 201) {
                 return new RedirectToPageResult("Login");
             }

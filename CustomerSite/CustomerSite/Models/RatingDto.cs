@@ -3,7 +3,6 @@ namespace CustomerSite.Models
     public class RatingDto
     {
         public int RatingId {get; set;}
-        // public int UserId { get; set; }
 
         public string Username {get; set;}
 

@@ -10,19 +10,13 @@
             <span class="input-group-text border-0" id="search-addon">
                 <i class="fas fa-search"></i>
             </span>
-            @* <li class="nav-item">
-                    <a class="nav-link text-dark" >Sản phẩm</a>
-            </li> *@
         </div>
     </div>
 
     <div class="product-categories">
         <h2 style="font-weight: 700; margin: 50px 0">ĐẶT MÓN NGAY - SAY CHUK CHUK</h2>
-        @* <form method="post">
-             <button asp-page-handler="productbycategories" asp-route-categories="11">refresher</button>
-        </form> *@
+        
         <form class="filter-categories" method="post">
-            <button asp-page-handler="productbycategories" asp-route-categories="All" class="filter-name active-filter">Tất cả</button>
             <button asp-page-handler="productbycategories" asp-route-categories="Refresher" class="filter-name">Refresher</button>
             <button asp-page-handler="productbycategories" asp-route-categories="Fruit Tea" class="filter-name">Fruit Tea</button>
             <button asp-page-handler="productbycategories" asp-route-categories="Wellness Tea" class="filter-name">Wellness Tea</button>
@@ -50,9 +44,7 @@
                                 <i class="fa-solid fa-circle-check"></i> Thêm vào giỏ hàng thành công !!!
                             </div>
                         </div>
-                    </div>
-                    @* <button style="z-index: 1000" onclick = > Thêm vào giỏ hàng</button> *@
-                    
+                    </div>  
                 </div>
             }
         </div>
