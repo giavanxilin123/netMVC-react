@@ -1,6 +1,4 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-namespace api.Models
+namespace api.Dto.User
 {
     public class UserResponseDto
     {

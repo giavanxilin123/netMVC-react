@@ -1,7 +1,4 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-namespace api.Models
+namespace api.Dto.Product
 {
     public class ProductDto
     {
@@ -13,7 +10,7 @@ namespace api.Models
 		
 		public int Stock { get; set; }
 
-        [Column(TypeName = "money")]
+        // [Column(TypeName = "money")]
 		public int Price { get; set; }
 
 		public string ImagePath {get; set;}

@@ -23,16 +23,14 @@ namespace api.Controllers
             return await _context.Admin.ToListAsync();
         }
 
-        // c.ForEach(x => Console.WriteLine(x.Name)); => get name
-
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(Admin), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetById(int id)
         {
-            var admin = await _context.Admin.Where(x => x.Id == id).FirstOrDefaultAsync();
-            // var a =  _context.Admin.Where(x => x.Id == id).ToList();
-            // a.ForEach(x => Console.WriteLine(x.Name));
+            var admin = await _context.Admin
+                .Where(x => x.Id == id)
+                .FirstOrDefaultAsync();
             return admin == null ? NotFound() : Ok(admin);
         }
 
@@ -70,11 +68,6 @@ namespace api.Controllers
             await _context.SaveChangesAsync();
 
             return NoContent();
-        }
-
-        public static string Base64Encode(string plainText) {
-            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
         }
 
     }

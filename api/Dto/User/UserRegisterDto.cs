@@ -1,10 +1,7 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-namespace api.Models
+namespace api.Dto.User
 {
     public class UserRegisterDto
     {
-        [Key]
         public string Username {get; set;}  
         public string Password {get; set;}
         public string Name {get; set;}

@@ -1,10 +1,7 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-namespace api.Models
+namespace api.Dto.Rating 
 {
     public class RatingDto
     {
-        [Key]
         public int RatingId {get; set;}
         // public int UserId { get; set; }
 

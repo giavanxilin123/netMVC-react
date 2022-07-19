@@ -12,8 +12,8 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ChukChukDbContext))]
-    [Migration("20220716115254_AuthMigration")]
-    partial class AuthMigration
+    [Migration("20220718152006_ThirdMigration")]
+    partial class ThirdMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -95,10 +95,13 @@ namespace api.Migrations
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Username");
 
                     b.ToTable("Order");
                 });
@@ -193,12 +196,15 @@ namespace api.Migrations
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("RatingId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("Username");
 
                     b.ToTable("Rating");
                 });
@@ -240,6 +246,17 @@ namespace api.Migrations
                     b.ToTable("User");
                 });
 
+            modelBuilder.Entity("api.Models.Order", b =>
+                {
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany("Order")
+                        .HasForeignKey("Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("api.Models.OrderLine", b =>
                 {
                     b.HasOne("api.Models.Order", null)
@@ -266,7 +283,15 @@ namespace api.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("api.Models.Order", b =>
@@ -277,6 +302,11 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Product", b =>
                 {
                     b.Navigation("Rating");
+                });
+
+            modelBuilder.Entity("api.Models.User", b =>
+                {
+                    b.Navigation("Order");
                 });
 #pragma warning restore 612, 618
         }

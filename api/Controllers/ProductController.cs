@@ -6,6 +6,7 @@ using api.Data;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using api.Dto.Product;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -23,8 +24,6 @@ namespace api.Controllers
         .Include(x => x.Category)
         .Include(x => x.Rating)
         .ToListAsync();
-
-        // c.ForEach(x => Console.WriteLine(x.Name)); => get name
 
         [HttpGet("GetByCategory/{category}")]
         [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
@@ -110,7 +109,6 @@ namespace api.Controllers
             newProduct.Updated = product.Updated;
             newProduct.Category = category;
 
-            // _context.Entry(product).State  = EntityState.Modified;
             await _context.SaveChangesAsync();
             return NoContent();
         }

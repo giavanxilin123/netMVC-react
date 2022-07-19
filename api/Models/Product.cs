@@ -27,6 +27,5 @@ namespace api.Models
         public DateTime Updated {get; set;}
         
         public List<Rating>? Rating {get; set;}
-
     }
 }

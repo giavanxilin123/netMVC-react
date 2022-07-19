@@ -12,7 +12,7 @@ using api.Data;
 namespace api.Migrations
 {
     [DbContext(typeof(ChukChukDbContext))]
-    [Migration("20220711065911_FirstMigration")]
+    [Migration("20220718125418_FirstMigration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -81,6 +81,53 @@ namespace api.Migrations
                     b.ToTable("Category");
                 });
 
+            modelBuilder.Entity("api.Models.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("Updated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("api.Models.OrderLine", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderLine");
+                });
+
             modelBuilder.Entity("api.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -147,12 +194,15 @@ namespace api.Migrations
                     b.Property<DateTime>("Updated")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("RatingId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("Username");
 
                     b.ToTable("Rating");
                 });
@@ -163,16 +213,16 @@ namespace api.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Created")
+                    b.Property<DateTime?>("Created")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordHash")
@@ -184,15 +234,21 @@ namespace api.Migrations
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("Updated")
+                    b.Property<DateTime?>("Updated")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Username");
 
                     b.ToTable("User");
+                });
+
+            modelBuilder.Entity("api.Models.OrderLine", b =>
+                {
+                    b.HasOne("api.Models.Order", null)
+                        .WithMany("OrderLine")
+                        .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("api.Models.Product", b =>
@@ -209,12 +265,30 @@ namespace api.Migrations
             modelBuilder.Entity("api.Models.Rating", b =>
                 {
                     b.HasOne("api.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("Rating")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Product");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("api.Models.Order", b =>
+                {
+                    b.Navigation("OrderLine");
+                });
+
+            modelBuilder.Entity("api.Models.Product", b =>
+                {
+                    b.Navigation("Rating");
                 });
 #pragma warning restore 612, 618
         }

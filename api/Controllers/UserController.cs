@@ -19,7 +19,9 @@ namespace api.Controllers
         public UserController(ChukChukDbContext context) => _context = context;
 
         [HttpGet]
-        public async Task<IEnumerable<User>> Get() => await _context.User.ToListAsync();
+        public async Task<IEnumerable<User>> Get() => await _context.User
+            .Include(x => x.Order)
+            .ToListAsync();
 
         [HttpPut("{username}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]

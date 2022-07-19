@@ -10,6 +10,7 @@ using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using api.Dto.User;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -48,7 +49,9 @@ namespace api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByUsername(string username)
         {
-            var user = await _context.User.Where(x => x.Username == username).FirstOrDefaultAsync();
+            var user = await _context.User
+                .Where(x => x.Username == username)
+                .FirstOrDefaultAsync();
             var response = new UserResponseDto {
                 Username = user.Username,
                 Name = user.Name,
@@ -63,7 +66,9 @@ namespace api.Controllers
 
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserLoginDto request){
-            var user = await _context.User.Where(x => x.Username == request.Username).FirstOrDefaultAsync();
+            var user = await _context.User
+                .Where(x => x.Username == request.Username)
+                .FirstOrDefaultAsync();
             if (user == null)
             {
                 return BadRequest("User not found.");
@@ -77,8 +82,6 @@ namespace api.Controllers
             string token = CreateToken(user);
             return Ok(token);
         }
-
-        
 
         private string CreateToken(User user)
         {

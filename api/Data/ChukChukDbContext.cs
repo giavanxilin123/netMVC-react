@@ -12,7 +12,6 @@ namespace api.Data
         {
 
         }
-        // public DbSet<Customer> Customer { get; set; }
         public DbSet<Admin> Admin { get; set; }
         public DbSet<Category> Category {get; set;}
         public DbSet<Product> Product { get; set; }
@@ -20,24 +19,6 @@ namespace api.Data
         public DbSet<Rating> Rating { get; set; }
         public DbSet<Order> Order {get; set;}
     }
-
-    //class Stack<T>
-    //{
-    //    T _fakevalue;
-    //    public void push(T fakevalue)
-    //    {
-    //        _fakevalue = fakevalue;
-
-    //    }
-    //    public T pop()
-    //    {
-    //        return _fakevalue;
-    //    }
-    //}
-
-
-    //public Stack<int> s = new Stack<int>();
-
 }
 
 

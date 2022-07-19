@@ -4,29 +4,26 @@
 
 namespace api.Migrations
 {
-    public partial class UpdateRatingMigration : Migration
+    public partial class SecondMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "UserId",
-                table: "Rating");
-
-            migrationBuilder.AddColumn<string>(
+            migrationBuilder.AlterColumn<string>(
                 name: "Username",
-                table: "Rating",
+                table: "Order",
                 type: "nvarchar(450)",
                 nullable: false,
-                defaultValue: "");
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rating_Username",
-                table: "Rating",
+                name: "IX_Order_Username",
+                table: "Order",
                 column: "Username");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Rating_User_Username",
-                table: "Rating",
+                name: "FK_Order_User_Username",
+                table: "Order",
                 column: "Username",
                 principalTable: "User",
                 principalColumn: "Username",
@@ -36,23 +33,20 @@ namespace api.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Rating_User_Username",
-                table: "Rating");
+                name: "FK_Order_User_Username",
+                table: "Order");
 
             migrationBuilder.DropIndex(
-                name: "IX_Rating_Username",
-                table: "Rating");
+                name: "IX_Order_Username",
+                table: "Order");
 
-            migrationBuilder.DropColumn(
+            migrationBuilder.AlterColumn<string>(
                 name: "Username",
-                table: "Rating");
-
-            migrationBuilder.AddColumn<int>(
-                name: "UserId",
-                table: "Rating",
-                type: "int",
+                table: "Order",
+                type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: 0);
+                oldClrType: typeof(string),
+                oldType: "nvarchar(450)");
         }
     }
 }

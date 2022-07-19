@@ -6,7 +6,7 @@ namespace api.Models
     {
         [Key]
         [Required]  
-        public string Username {get; set;}  
+        public string Username {get; set;}      
         public DateTime? Created {get; set;}
         public DateTime? Updated {get; set;}
         public string Name { get; set; }
@@ -20,5 +20,6 @@ namespace api.Models
         public byte[] PasswordHash {get; set;}
 
         public byte[] PasswordSalt {get; set;}
+        public List<Order>? Order {get; set;}
     }
 }
