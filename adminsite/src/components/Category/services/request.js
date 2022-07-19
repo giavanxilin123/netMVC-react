@@ -1,9 +1,9 @@
 import EndPoints from '../../../Constants/endpoints';
-import {get, post, del} from '../../../httpHelper'
+import {get, postFormData, del} from '../../../httpHelper'
 
 
 export const addCategoryRequest = (payload) => {
-    return post(EndPoints.category, payload);
+    return postFormData(EndPoints.category, payload);
 }
 
 export const deleteCategoryRequest = (name) => {
@@ -13,7 +13,3 @@ export const deleteCategoryRequest = (name) => {
 export const getCategoryRequest = () => {
     return get(EndPoints.category);
 }
-
-
-
-

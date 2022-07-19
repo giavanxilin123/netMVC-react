@@ -164,8 +164,6 @@ function CategoryManagement() {
     return new Date(rowData.updated).toLocaleString();
   } 
 
-  
-  
   return (
     <div className="datatable-crud-demo">
         <Toast ref={toast} />
@@ -180,7 +178,6 @@ function CategoryManagement() {
           </DataTable>
         </div>
 
-        
           <Dialog visible={categoryDialog} style={{ width: '450px' }} header="Add Category" modal className="p-fluid"  onHide={hideDialog}>
               <form onSubmit={formik.handleSubmit} className="p-fluid">
                     <label htmlFor="name" >Name*</label>
@@ -192,7 +189,6 @@ function CategoryManagement() {
               </form>
           </Dialog>
        
-
           <Dialog visible={deleteCategoryDialog} style={{ width: '450px' }} header="Confirm" modal footer={deleteCategoryDialogFooter} onHide={hideDeleteCategoryDialog}>
             <div className="confirmation-content">
                 <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem'}} />

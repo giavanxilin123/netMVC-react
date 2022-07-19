@@ -78,8 +78,6 @@ function ProductManagement() {
 
         const addProductAsync = async (payload) => {
           let result = await handleApi(addProductRequest(payload));
-          console.log("result", result)
-          // dùng setProduct _product là m đi chắc tại _product đang chơi thằng id = 0
           setProduct(result.data)
           _products.push(result.data);
         }
@@ -206,7 +204,6 @@ function ProductManagement() {
     </React.Fragment>
   );
 
-
   //methods
   const onCategoryChange = e => {
     let _product = {...product}
@@ -272,7 +269,7 @@ function ProductManagement() {
     }
   }
 
-  
+
   return (
     <div className="datatable-crud-demo">
         <Toast ref={toast} />

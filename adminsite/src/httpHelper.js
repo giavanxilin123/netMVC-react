@@ -1,15 +1,6 @@
 import axios from 'axios';
 import {BASE_URL} from "./Constants/config"
 
-// const token = localStorage.getItem("token");
-
-// export function get(url) {
-//     console.log(token);
-//     return axios.get(endpoint + url, {
-//       headers: { Authorization: `Bearer ${token}` },
-//     });
-// }
-
 export const get = endpoint => {
     return axios.get(BASE_URL + "/" + endpoint);
 }
@@ -25,3 +16,27 @@ export function put(endpoint, body) {
 export function del(endpoint) {
     return axios.delete(BASE_URL + "/" + endpoint);
 }
+
+export function postFormData(endpoint, body) {
+    return axios({
+        method: "post",
+        url : BASE_URL + "/" + endpoint,
+        data : body,
+        headers: { "Content-Type": "multipart/form-data" },
+    })
+}
+
+// axios({
+//     method: "post",
+//     url: "myurl",
+//     data: bodyFormData,
+//     headers: { "Content-Type": "multipart/form-data" },
+//   })
+//     .then(function (response) {
+//       //handle success
+//       console.log(response);
+//     })
+//     .catch(function (response) {
+//       //handle error
+//       console.log(response);
+//     });
